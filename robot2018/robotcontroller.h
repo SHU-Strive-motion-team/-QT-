@@ -25,7 +25,7 @@ public:
 
 	RobotController(QGraphicsScene &scene, QObject *parent = 0);
 	~RobotController();
-	void robotInit(); //鏈哄櫒浜哄垵濮嬪寲
+	void robotInit(); //机器人初始化
 	void setMapType(int mapType);
 	void setRobotCoordinate(float x = 0, float y = 0, float theta = 0);
 	void setRobotSpeedFromArm(float x = 0, float y = 0, float theta = 0);

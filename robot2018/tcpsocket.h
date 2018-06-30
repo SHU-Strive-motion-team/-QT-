@@ -5,7 +5,7 @@
 #include <QByteArray>
 #include <QString>
 
-extern int socketStat; //socketç›‘å¬çŠ¶æ€ 0-æœªç›‘å¬ï¼Œ1-ç›‘å¬
+extern int socketStat; //socket¼àÌı×´Ì¬ 0-Î´¼àÌı£¬1-¼àÌı
 extern QByteArray lidar;
 extern QByteArray shijue;
 
@@ -38,7 +38,7 @@ signals:
 
 private:
 
-	QTcpSocket * rplidarConnection = NULL; //socketçš„tcpè¿æ¥æŒ‡é’ˆ
+	QTcpSocket * rplidarConnection = NULL; //socketµÄtcpÁ¬½ÓÖ¸Õë
 	QTcpSocket *shijueConnection = NULL;
 
 

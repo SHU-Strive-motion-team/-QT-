@@ -4,7 +4,7 @@
 #include "tcpsocket.h"
 #include "thread.h"
 
-int socketStat = 0;
+int socketStat = 0;//socket¼àÌý×´Ì¬ 0-Î´¼àÌý£¬1-¼àÌý
 int port;
 Tcpserver *server;
 QByteArray lidar;
@@ -18,32 +18,32 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
-	//åœ¨ä¸»ç•Œé¢æ·»åŠ view
+	//ÔÚÖ÷½çÃæÌí¼Óview
 	ui->horizontalLayout->addWidget(view);
-	//è®¾ç½®sceneå¤§å°
+	//ÉèÖÃscene´óÐ¡
 	scene->setSceneRect(0, 0, 720, 545);
-	//é»˜è®¤å·¦ä¸Šè§’
+	//Ä¬ÈÏ×óÉÏ½Ç
 	view->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 	view->setFixedSize(725, 550);
 
-	//è®¾ç½®viewèƒŒæ™¯
+	//ÉèÖÃview±³¾°
 	pixmap = new QPixmap(720, 545);
 	QPainter p(pixmap);
 	p.setBrush(QBrush(Qt::gray));
 	p.drawRect(0, 0, 720, 545);
 	view->setBackgroundBrush(QBrush(*pixmap));
 
-	//è¯»å–COMå£ä¿¡æ¯
+	//¶ÁÈ¡COM¿ÚÐÅÏ¢
 	foreach(const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
 		ui->comComboBox->addItem(info.portName());
 	}
 
 
-	//é»˜è®¤åˆå§‹åŒ–
+	//Ä¬ÈÏ³õÊ¼»¯
 	ui->xLineEdit->setText("0");
 	ui->yLineEdit->setText("0");
 	ui->thetaLineEdit->setText("0");
-	mapType = 0;
+	mapType = 0;//³¡µØÀàÐÍ£¬0-×ó°ë³¡£¬1-ÓÒ°ë³¡
 	comStat = 0;
 
 }
@@ -54,9 +54,9 @@ MainWindow::~MainWindow()
 }
 
 /* paintEvent
-* æè¿°ï¼šuiå¯åŠ¨ç»˜åˆ¶äº‹ä»¶
-* è¾“å…¥ï¼šQPaintEvent -
-* è¾“å‡ºï¼šæ— 
+* ÃèÊö£ºuiÆô¶¯»æÖÆÊÂ¼þ
+* ÊäÈë£ºQPaintEvent -
+* Êä³ö£ºÎÞ
 */
 void MainWindow::paintEvent(QPaintEvent *)
 {
@@ -64,29 +64,29 @@ void MainWindow::paintEvent(QPaintEvent *)
 }
 
 /* showMapLeft
-* æè¿°ï¼šç»˜åˆ¶å·¦åŠåœºåœ°å›¾
-* è¾“å…¥ï¼šæ— 
-* è¾“å‡ºï¼šæ— 
+* ÃèÊö£º»æÖÆ×ó°ë³¡µØÍ¼
+* ÊäÈë£ºÎÞ
+* Êä³ö£ºÎÞ
 */
 void MainWindow::showMapLeft()
 {
-	//æ¸…é™¤çŽ°æœ‰pixmap
+	//Çå³ýÏÖÓÐpixmap
 	QPixmap *pPixmap;
 	pPixmap = pixmap;
 	pixmap = new QPixmap(720, 545);
 	pPixmap->~QPixmap();
 
 	QPainter painter(pixmap);
-	//è®¾ç½®èƒŒæ™¯è‰²
+	//ÉèÖÃ±³¾°É«
 	painter.setPen(Qt::gray);
 	painter.setBrush(Qt::gray);
 	painter.drawRect(0, 0, 720, 545);
 
-	//è®¾ç½®çº¿æ¡é¢œè‰²
+	//ÉèÖÃÏßÌõÑÕÉ«
 	painter.setPen(Qt::black);
 	painter.setBrush(Qt::transparent);
 
-	//ç»˜åˆ¶çƒåœºè¾¹ç•Œ
+	//»æÖÆÇò³¡±ß½ç
 	QPainterPath groundPath;
 	groundPath.moveTo(710, 110);
 	groundPath.lineTo(10, 110);
@@ -102,7 +102,7 @@ void MainWindow::showMapLeft()
 	groundPath.lineTo(10, 10);
 	painter.drawPath(groundPath);
 
-	//ä¸­åœˆçº¿
+	//ÖÐÈ¦Ïß
 	QPainterPath centerPath;
 	centerPath.moveTo(620, 110);
 	centerPath.arcTo(620, 20, 180, 180, 180, 90);
@@ -112,32 +112,32 @@ void MainWindow::showMapLeft()
 	centerPath.arcTo(540, -60, 340, 340, 180, 90);
 	painter.drawPath(centerPath);
 
-	//ä¸‰åˆ†çº¿
+	//Èý·ÖÏß
 	QPainterPath threePath;
 	threePath.moveTo(10, 437.5);
 	threePath.lineTo(173.1, 437.5);
 	threePath.arcTo(-248.75, -227.5, 675, 675, 284, 166);
 	painter.drawPath(threePath);
 
-	//ç½šçƒçº¿
+	//·£ÇòÏß
 	QPainterPath freeThrowPath;
 	freeThrowPath.moveTo(210, 110);
 	freeThrowPath.arcTo(210, 20, 180, 180, 180, 360);
 	painter.drawPath(freeThrowPath);
 
-	//æŠ•ç¯®è¾¹çº¿
+	//Í¶Àº±ßÏß
 	QPainterPath basketLinePath;
 	basketLinePath.moveTo(10, 171.64);
 	basketLinePath.arcTo(-11.25, 10, 200, 200, 218, 284);
 	painter.drawPath(basketLinePath);
 
-	//åº•çº¿ç½®çƒä½
+	//µ×ÏßÖÃÇòÎ»
 	QPainterPath endBallPath;
 	endBallPath.moveTo(97.5, 460);
 	endBallPath.lineTo(60, 460);
 	painter.drawPath(endBallPath);
 
-	//ç¯®ç­
+	//Àº¿ð
 	QPainterPath basketPath;
 	basketPath.moveTo(88.75, 85);
 	basketPath.lineTo(88.75, 135);
@@ -149,29 +149,29 @@ void MainWindow::showMapLeft()
 }
 
 /* showMapRight
-* æè¿°ï¼šå³åŠåœºåœ°å›¾ç»˜åˆ¶
-* è¾“å…¥ï¼šæ— 
-* è¾“å‡ºï¼šæ— 
+* ÃèÊö£ºÓÒ°ë³¡µØÍ¼»æÖÆ
+* ÊäÈë£ºÎÞ
+* Êä³ö£ºÎÞ
 */
 void MainWindow::showMapRight()
 {
-	//æ¸…é™¤çŽ°æœ‰pixmap
+	//Çå³ýÏÖÓÐpixmap
 	QPixmap *pPixmap;
 	pPixmap = pixmap;
 	pixmap = new QPixmap(720, 545);
 	pPixmap->~QPixmap();
 
 	QPainter painter(pixmap);
-	//è®¾ç½®èƒŒæ™¯è‰²
+	//ÉèÖÃ±³¾°É«
 	painter.setPen(Qt::gray);
 	painter.setBrush(Qt::gray);
 	painter.drawRect(0, 0, 720, 545);
 
-	//è®¾ç½®çº¿æ¡é¢œè‰²
+	//ÉèÖÃÏßÌõÑÕÉ«
 	painter.setPen(Qt::black);
 	painter.setBrush(Qt::transparent);
 
-	//ç»˜åˆ¶çƒåœºè¾¹ç•Œ
+	//»æÖÆÇò³¡±ß½ç
 	QPainterPath groundPath;
 	groundPath.moveTo(10, 110);
 	groundPath.lineTo(710, 110);
@@ -187,7 +187,7 @@ void MainWindow::showMapRight()
 	groundPath.lineTo(710, 10);
 	painter.drawPath(groundPath);
 
-	//ä¸­åœˆçº¿
+	//ÖÐÈ¦Ïß
 	QPainterPath centerPath;
 	centerPath.moveTo(10, 200);
 	centerPath.arcTo(-80, 20, 180, 180, 270, 90);
@@ -197,32 +197,32 @@ void MainWindow::showMapRight()
 	centerPath.arcTo(-160, -60, 340, 340, 270, 90);
 	painter.drawPath(centerPath);
 
-	//ä¸‰åˆ†çº¿
+	//Èý·ÖÏß
 	QPainterPath threePath;
 	threePath.moveTo(631.25, -227.5);
 	threePath.arcTo(293.75, -227.5, 675, 675, 90, 166);
 	threePath.lineTo(710, 437.5);
 	painter.drawPath(threePath);
 
-	//ç½šçƒçº¿
+	//·£ÇòÏß
 	QPainterPath freeThrowPath;
 	freeThrowPath.moveTo(330, 110);
 	freeThrowPath.arcTo(330, 20, 180, 180, 180, 360);
 	painter.drawPath(freeThrowPath);
 
-	//æŠ•ç¯®è¾¹çº¿
+	//Í¶Àº±ßÏß
 	QPainterPath basketLinePath;
 	basketLinePath.moveTo(710, 48.36);
 	basketLinePath.arcTo(531.25, 10, 200, 200, 38, 284);
 	painter.drawPath(basketLinePath);
 
-	//åº•çº¿ç½®çƒä½
+	//µ×ÏßÖÃÇòÎ»
 	QPainterPath endBallPath;
 	endBallPath.moveTo(622.5, 460);
 	endBallPath.lineTo(660, 460);
 	painter.drawPath(endBallPath);
 
-	//ç¯®ç­
+	//Àº¿ð
 	QPainterPath basketPath;
 	basketPath.moveTo(631.25, 85);
 	basketPath.lineTo(631.25, 135);
@@ -234,9 +234,9 @@ void MainWindow::showMapRight()
 }
 
 /* on_restartButton_clicked
-* æè¿°ï¼šé‡ç½®æŒ‰é’®ç‚¹å‡»
-* è¾“å…¥ï¼šæ— 
-* è¾“å‡ºï¼šæ— 
+* ÃèÊö£ºÖØÖÃ°´Å¥µã»÷
+* ÊäÈë£ºÎÞ
+* Êä³ö£ºÎÞ
 */
 void MainWindow::on_restartButton_clicked()
 {
@@ -261,9 +261,9 @@ void MainWindow::on_restartButton_clicked()
 }
 
 /* on_leftGroundButton_clicked
-* æè¿°ï¼šç»˜åˆ¶å·¦åŠåœºæŒ‰é’®ç‚¹å‡»äº‹ä»¶
-* è¾“å…¥ï¼šæ— 
-* è¾“å‡ºï¼šæ— 
+* ÃèÊö£º»æÖÆ×ó°ë³¡°´Å¥µã»÷ÊÂ¼þ
+* ÊäÈë£ºÎÞ
+* Êä³ö£ºÎÞ
 */
 void MainWindow::on_leftGroundButton_clicked()
 {
@@ -274,9 +274,9 @@ void MainWindow::on_leftGroundButton_clicked()
 }
 
 /* on_rightGroundButton_clicked
-* æè¿°ï¼šç»˜åˆ¶å³åŠåœºæŒ‰é’®ç‚¹å‡»äº‹ä»¶
-* è¾“å…¥ï¼šæ— 
-* è¾“å‡ºï¼šæ— 
+* ÃèÊö£º»æÖÆÓÒ°ë³¡°´Å¥µã»÷ÊÂ¼þ
+* ÊäÈë£ºÎÞ
+* Êä³ö£ºÎÞ
 */
 void MainWindow::on_rightGroundButton_clicked()
 {
@@ -287,9 +287,9 @@ void MainWindow::on_rightGroundButton_clicked()
 }
 
 /* on_handPositionButton_clicked
-* æè¿°ï¼šæ‰‹åŠ¨è®¾ç½®æœºå™¨äººä½ç½®æŒ‰é’®ç‚¹å‡»äº‹ä»¶
-* è¾“å…¥ï¼šæ— 
-* è¾“å‡ºï¼šæ— 
+* ÃèÊö£ºÊÖ¶¯ÉèÖÃ»úÆ÷ÈËÎ»ÖÃ°´Å¥µã»÷ÊÂ¼þ
+* ÊäÈë£ºÎÞ
+* Êä³ö£ºÎÞ
 */
 void MainWindow::on_handPositionButton_clicked()
 {
@@ -303,35 +303,35 @@ void MainWindow::on_handPositionButton_clicked()
 
 
 /* on_serverButton_clicked
-* æè¿°ï¼šå»ºç«‹udpçš„serverç«¯ç›‘å¬
-* è¾“å…¥ï¼šæ— 
-* è¾“å‡ºï¼šæ— 
+* ÃèÊö£º½¨Á¢udpµÄserver¶Ë¼àÌý
+* ÊäÈë£ºÎÞ
+* Êä³ö£ºÎÞ
 */
 
 void MainWindow::on_serverButton_clicked()
 {
 
-	if (socketStat == 0)
+	if (socketStat == 0)//¼àÌý×´Ì¬ÎªÎ´¼àÌý
 	{
-		//èŽ·å–ç«¯å£
+		//»ñÈ¡¶Ë¿Ú
 		port = ui->portLineEdit->text().toInt();
 		if (port == 0)
 			port = 65432;
 		ui->portLineEdit->setText(QString::number(port));
 
-		//uiéƒ¨åˆ†è°ƒæ•´
-		ui->serverButton->setText("Serverå…³é—­");
+		//ui²¿·Öµ÷Õû
+		ui->serverButton->setText(u8"Server¹Ø±Õ");
 		ui->portLineEdit->setEnabled(false);
 		socketStat = 1;
 		server = new Tcpserver;
 		server->getlisten();
-		//è¿žæŽ¥tcpæ•°æ®ä¸Žuiæ•°æ®
+		//Á¬½ÓtcpÊý¾ÝÓëuiÊý¾Ý
 		connect(server, SIGNAL(renew_ui()), this, SLOT(ui_rplidarData()));
 	}
 	else
 	{
-		//uiè°ƒæ•´
-		ui->serverButton->setText("Serveræ‰“å¼€");
+		//uiµ÷Õû
+		ui->serverButton->setText(u8"Server´ò¿ª");
 		ui->portLineEdit->setEnabled(true);
 		socketStat = 0;
 		server->getlisten();
@@ -342,9 +342,9 @@ void MainWindow::on_serverButton_clicked()
 
 
 /*listenConnection
-*æè¿°:tcpç›‘å¬æ§½å‡½æ•°
-*è¾“å…¥
-*è¾“å‡º
+*ÃèÊö:tcp¼àÌý²Ûº¯Êý
+*ÊäÈë
+*Êä³ö
 *
 */
 void Tcpserver::listenConnection()
@@ -367,9 +367,9 @@ void Tcpserver::listenConnection()
 }
 
 /* acceptConnection
-* æè¿°ï¼štcpè¿žæŽ¥æ§½å‡½æ•°
-* è¾“å…¥ï¼šæ— 
-* è¾“å‡ºï¼šæ— 
+* ÃèÊö£ºtcpÁ¬½Ó²Ûº¯Êý
+* ÊäÈë£ºÎÞ
+* Êä³ö£ºÎÞ
 */
 void Tcpserver::acceptConnection()
 {
@@ -390,25 +390,25 @@ void Tcpserver::acceptConnection()
 
 
 /* readClient
-* æè¿°ï¼štcpæŽ¥æ”¶æ§½å‡½æ•°å¹¶å¼€å¯æ–°çº¿ç¨‹ é›·è¾¾
-* è¾“å…¥ï¼šæ— 
-* è¾“å‡ºï¼šæ— 
+* ÃèÊö£ºtcp½ÓÊÕ²Ûº¯Êý²¢¿ªÆôÐÂÏß³Ì À×´ï
+* ÊäÈë£ºÎÞ
+* Êä³ö£ºÎÞ
 */
 void Tcpserver::readClient()
 
 {
 	lidar = rplidarConnection->readAll();
 
-	emit renew_ui(); // å‘å‡ºä¿¡å·->æ›´æ–°socketLineEditer
+	emit renew_ui(); // ·¢³öÐÅºÅ->¸üÐÂsocketLineEditer
 
 	Thread1 *newthread1 = new Thread1;
 	newthread1->start();
 }
 
 /* sockSend
-* æè¿°ï¼šsocketå‘é€æ§½å‡½æ•° è§†è§‰
-* è¾“å…¥ï¼šæ— 
-* è¾“å‡ºï¼šæ— 
+* ÃèÊö£ºsocket·¢ËÍ²Ûº¯Êý ÊÓ¾õ
+* ÊäÈë£ºÎÞ
+* Êä³ö£ºÎÞ
 */
 
 void Tcpserver::sockSend()
@@ -417,9 +417,9 @@ void Tcpserver::sockSend()
 }
 
 /* readwriteClient
-* æè¿°ï¼štcpæŽ¥æ”¶æ§½å‡½æ•°å¹¶å¼€å¯æ–°çº¿ç¨‹ è§†è§‰
-* è¾“å…¥ï¼šæ— 
-* è¾“å‡ºï¼šæ— 
+* ÃèÊö£ºtcp½ÓÊÕ²Ûº¯Êý²¢¿ªÆôÐÂÏß³Ì ÊÓ¾õ
+* ÊäÈë£ºÎÞ
+* Êä³ö£ºÎÞ
 */
 void Tcpserver::readwriteClient()
 {
@@ -430,9 +430,9 @@ void Tcpserver::readwriteClient()
 
 }
 /* ui_tcpData
-* æè¿°ï¼šuiæ›´æ–°socketå‘é€çš„æ•°æ®
-* è¾“å…¥ï¼šæ— 
-* è¾“å‡ºï¼šæ— 
+* ÃèÊö£ºui¸üÐÂsocket·¢ËÍµÄÊý¾Ý
+* ÊäÈë£ºÎÞ
+* Êä³ö£ºÎÞ
 */
 void MainWindow::ui_rplidarData()
 {
@@ -440,15 +440,15 @@ void MainWindow::ui_rplidarData()
 }
 
 /* on_comButton_clicked
-* æè¿°ï¼šç‚¹å‡»æ‰“å¼€ä¸²å£
-* è¾“å…¥ï¼šæ— 
-* è¾“å‡ºï¼šæ— 
+* ÃèÊö£ºµã»÷´ò¿ª´®¿Ú
+* ÊäÈë£ºÎÞ
+* Êä³ö£ºÎÞ
 */
 void MainWindow::on_comButton_clicked()
 {
 	if (comStat == 0)
 	{
-		//èŽ·å–é€‰æ‹©çš„æ³¢ç‰¹çŽ‡
+		//»ñÈ¡Ñ¡ÔñµÄ²¨ÌØÂÊ
 		int baudId = ui->baudRateComboBox->currentIndex();
 		QSerialPort::BaudRate baudRate;
 		switch (baudId) {
@@ -477,11 +477,11 @@ void MainWindow::on_comButton_clicked()
 			baudRate = QSerialPort::Baud115200;
 			break;
 		default:
-			QMessageBox::warning(NULL, "è­¦å‘Š", "æ— æ•ˆæ³¢ç‰¹çŽ‡ï¼", QMessageBox::Yes);
+			QMessageBox::warning(NULL, "¾¯¸æ", "ÎÞÐ§²¨ÌØÂÊ£¡", QMessageBox::Yes);
 			break;
 		}
 
-		//èŽ·å–æ•°æ®ä½
+		//»ñÈ¡Êý¾ÝÎ»
 		int dataBitsId = ui->dataBitsComboBox->currentIndex();
 		QSerialPort::DataBits dataBits;
 		switch (dataBitsId) {
@@ -498,11 +498,11 @@ void MainWindow::on_comButton_clicked()
 			dataBits = QSerialPort::Data8;
 			break;
 		default:
-			QMessageBox::warning(NULL, "è­¦å‘Š", "æ— æ•ˆæ•°æ®ä½ï¼", QMessageBox::Yes);
+			QMessageBox::warning(NULL, "¾¯¸æ", "ÎÞÐ§Êý¾ÝÎ»£¡", QMessageBox::Yes);
 			break;
 		}
 
-		//èŽ·å–æ ¡éªŒä½
+		//»ñÈ¡Ð£ÑéÎ»
 		int parityId = ui->parityComboBox->currentIndex();
 		QSerialPort::Parity parity;
 		switch (parityId) {
@@ -522,11 +522,11 @@ void MainWindow::on_comButton_clicked()
 			parity = QSerialPort::MarkParity;
 			break;
 		default:
-			QMessageBox::warning(NULL, "è­¦å‘Š", "æ— æ•ˆæ ¡éªŒä½ï¼", QMessageBox::Yes);
+			QMessageBox::warning(NULL, "¾¯¸æ", "ÎÞÐ§Ð£ÑéÎ»£¡", QMessageBox::Yes);
 			break;
 		}
 
-		//èŽ·å–åœæ­¢ä½
+		//»ñÈ¡Í£Ö¹Î»
 		int stopBitsId = ui->stopBitsComboBox->currentIndex();
 		QSerialPort::StopBits stopBits;
 		switch (stopBitsId) {
@@ -540,13 +540,13 @@ void MainWindow::on_comButton_clicked()
 			stopBits = QSerialPort::TwoStop;
 			break;
 		default:
-			QMessageBox::warning(NULL, "è­¦å‘Š", "æ— æ•ˆåœæ­¢ä½ï¼", QMessageBox::Yes);
+			QMessageBox::warning(NULL, "¾¯¸æ", "ÎÞÐ§Í£Ö¹Î»£¡", QMessageBox::Yes);
 			break;
 		}
 
 		QString comName = ui->comComboBox->currentText();
 
-		//æ‰“å¼€ä¸²å£
+		//´ò¿ª´®¿Ú
 		comPort = new QSerialPort(comName);
 		if (comPort->open(QIODevice::ReadWrite))
 		{
@@ -554,7 +554,7 @@ void MainWindow::on_comButton_clicked()
 			comPort->setStopBits(stopBits);
 			comPort->setParity(parity);
 			comPort->setDataBits(dataBits);
-			comPort->setFlowControl(QSerialPort::NoFlowControl);        //æ²¡æœ‰æµæŽ§
+			comPort->setFlowControl(QSerialPort::NoFlowControl);        //Ã»ÓÐÁ÷¿Ø
 
 			comPort->clearError();
 			comPort->clear();
@@ -569,8 +569,8 @@ void MainWindow::on_comButton_clicked()
 
 
 
-			//ä¿®æ”¹UI
-			ui->comButton->setText("å…³é—­ä¸²å£");
+			//ÐÞ¸ÄUI
+			ui->comButton->setText("¹Ø±Õ´®¿Ú");
 			ui->baudRateComboBox->setEnabled(false);
 			ui->dataBitsComboBox->setEnabled(false);
 			ui->parityComboBox->setEnabled(false);
@@ -581,19 +581,19 @@ void MainWindow::on_comButton_clicked()
 		}
 		else
 		{
-			//æ‰“å¼€ä¸²å£å¤±è´¥
-			QMessageBox::warning(NULL, "è­¦å‘Š", "æ‰“å¼€ä¸²å£å¤±è´¥", QMessageBox::Yes);
+			//´ò¿ª´®¿ÚÊ§°Ü
+			QMessageBox::warning(NULL, "¾¯¸æ", "´ò¿ª´®¿ÚÊ§°Ü", QMessageBox::Yes);
 			delete comPort;
 		}
 
 	}
 	else
 	{
-		//å…³é—­ä¸²å£
+		//¹Ø±Õ´®¿Ú
 		comPort->close();
 		delete comPort;
-		//uiè°ƒæ•´
-		ui->comButton->setText("æ‰“å¼€ä¸²å£");
+		//uiµ÷Õû
+		ui->comButton->setText("´ò¿ª´®¿Ú");
 		ui->baudRateComboBox->setEnabled(true);
 		ui->dataBitsComboBox->setEnabled(true);
 		ui->parityComboBox->setEnabled(true);
@@ -606,9 +606,9 @@ void MainWindow::on_comButton_clicked()
 }
 
 /* com_readData
-* æè¿°ï¼šCOMå£æ•°æ®è¯»å…¥æ§½
-* è¾“å…¥ï¼šæ— 
-* è¾“å‡ºï¼šæ— 
+* ÃèÊö£ºCOM¿ÚÊý¾Ý¶ÁÈë²Û
+* ÊäÈë£ºÎÞ
+* Êä³ö£ºÎÞ
 */
 void MainWindow::com_readData()
 {
@@ -621,7 +621,7 @@ void MainWindow::com_readData()
 		if (comCheckSum(data, arr.size()))
 		{
 			palette.setColor(QPalette::Text, Qt::black);
-			//æ ¡éªŒé€šè¿‡ï¼Œå›¾åƒæ›´æ–°
+			//Ð£ÑéÍ¨¹ý£¬Í¼Ïñ¸üÐÂ
 			float x, y, theta;
 			x = data[2] / 100.0f;
 			y = data[3] / 100.0f;
@@ -645,24 +645,24 @@ void MainWindow::com_readData()
 }
 
 /* on_comRefreshButton_clicked
-* æè¿°ï¼šåˆ·æ–°æŒ‰é’®æŒ‰ä¸‹ï¼Œåˆ·æ–°comå£ä¿¡æ¯
-* è¾“å…¥ï¼šæ— 
-* è¾“å‡ºï¼šæ— 
+* ÃèÊö£ºË¢ÐÂ°´Å¥°´ÏÂ£¬Ë¢ÐÂcom¿ÚÐÅÏ¢
+* ÊäÈë£ºÎÞ
+* Êä³ö£ºÎÞ
 */
 void MainWindow::on_comRefreshButton_clicked()
 {
-	//æ¸…ç©ºåŽŸæ¥å†…å®¹
+	//Çå¿ÕÔ­À´ÄÚÈÝ
 	ui->comComboBox->clear();
-	//éåŽ†å¯ç”¨ä¸²å£å·
+	//±éÀú¿ÉÓÃ´®¿ÚºÅ
 	foreach(const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
 		ui->comComboBox->addItem(info.portName());
 	}
 }
 
 /* on_shotButton_clicked
-* æè¿°ï¼šå¼¹å°„å¼€å…³ï¼ŒçŽ°æš‚æ—¶ç”¨ä½œä¸²å£å‘é€
-* è¾“å…¥ï¼šæ— 
-* è¾“å‡ºï¼šæ— 
+* ÃèÊö£ºµ¯Éä¿ª¹Ø£¬ÏÖÔÝÊ±ÓÃ×÷´®¿Ú·¢ËÍ
+* ÊäÈë£ºÎÞ
+* Êä³ö£ºÎÞ
 */
 void MainWindow::on_shotButton_clicked()
 {
@@ -672,16 +672,16 @@ void MainWindow::on_shotButton_clicked()
 		comPort->write("hello");
 
 		if (comPort->error() != QSerialPort::NoError)
-			QMessageBox::warning(NULL, "è­¦å‘Š", "æ•°æ®å‘é€å¤±è´¥ï¼", QMessageBox::Yes);
+			QMessageBox::warning(NULL, "¾¯¸æ", "Êý¾Ý·¢ËÍÊ§°Ü£¡", QMessageBox::Yes);
 		comPort->clearError();
 	}
 }
 
 /* comCheckSum
-* æè¿°ï¼šä¸²å£æŽ¥æ”¶æ•°æ®å’Œæ ¡éªŒ
-* è¾“å…¥ï¼š*data - æŽ¥æ”¶æ•°æ®æŒ‡é’ˆ
-*      size - æ•°æ®é•¿åº¦
-* è¾“å‡ºï¼šæ ¡éªŒç»“æžœ
+* ÃèÊö£º´®¿Ú½ÓÊÕÊý¾ÝºÍÐ£Ñé
+* ÊäÈë£º*data - ½ÓÊÕÊý¾ÝÖ¸Õë
+*      size - Êý¾Ý³¤¶È
+* Êä³ö£ºÐ£Ñé½á¹û
 */
 
 

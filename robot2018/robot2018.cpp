@@ -16,14 +16,14 @@ Robot::~Robot()
 }
 
 /* shape
-* æè¿°ï¼šç»§æ‰¿è‡ªçˆ¶ç±»ï¼ŒæŠ½è±¡ç±»å¤å†™ï¼Œå…ƒç´ å¤–è§‚,æŒ‰ç…§60cmè®¡ç®—
-* è¾“å…¥ï¼šæ— 
-* è¾“å‡ºï¼šå…ƒç´ è·¯å¾„
+* ÃèÊö£º¼Ì³Ğ×Ô¸¸Àà£¬³éÏóÀà¸´Ğ´£¬ÔªËØÍâ¹Û,°´ÕÕ60cm¼ÆËã
+* ÊäÈë£ºÎŞ
+* Êä³ö£ºÔªËØÂ·¾¶
 */
 QPainterPath Robot::shape() const
 {
 	QPainterPath path;
-	//ç›¸å¯¹äºç”»ç¬”åŸç‚¹ï¼Œï¼ˆ-15ï¼Œ-15ï¼‰ä½ç½®ä¸ºå·¦ä¸Šè§’ï¼Œé•¿å®½30
+	//Ïà¶ÔÓÚ»­±ÊÔ­µã£¬£¨-15£¬-15£©Î»ÖÃÎª×óÉÏ½Ç£¬³¤¿í30
 	path.moveTo(-7.5, -12.99);
 	path.arcTo(-15, -15, 30, 30, 120, 300);
 	//path.addRect(QRectF(-15,-15,30,30));
@@ -32,26 +32,26 @@ QPainterPath Robot::shape() const
 }
 
 /* paint
-* æè¿°ï¼šç»§æ‰¿è‡ªçˆ¶ç±»ï¼ŒæŠ½è±¡ç±»å®ä¾‹åŒ–å¤å†™
-* è¾“å…¥ï¼š
-* è¾“å‡ºï¼šæ— 
+* ÃèÊö£º¼Ì³Ğ×Ô¸¸Àà£¬³éÏóÀàÊµÀı»¯¸´Ğ´
+* ÊäÈë£º
+* Êä³ö£ºÎŞ
 */
 void Robot::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
 	painter->save();
-	//painteråŸç‚¹ç§»åŠ¨åˆ°æœºå™¨äººä¸­å¿ƒä½ç½®
+	//painterÔ­µãÒÆ¶¯µ½»úÆ÷ÈËÖĞĞÄÎ»ÖÃ
 	painter->translate(xOfMap, yOfMap);
-	//ä»¥æœºå™¨äººä¸­å¿ƒéœ€å®‰è£…
+	//ÒÔ»úÆ÷ÈËÖĞĞÄĞè°²×°
 	painter->rotate(theta);
-	//è®¾ç½®ç”»ç¬”å¡«å……é¢œè‰²
+	//ÉèÖÃ»­±ÊÌî³äÑÕÉ«
 	painter->fillPath(shape(), Qt::yellow);
 	painter->restore();
 }
 
 /* boundingRect
-* æè¿°ï¼šç»§æ‰¿è‡ªçˆ¶ç±»ï¼ŒæŠ½è±¡ç±»å¤å†™ï¼Œæ ‡å®šå…ƒç´ èŒƒå›´ï¼ŒæŒ‰100cmè®¡ç®—
-* è¾“å…¥ï¼šæ— 
-* è¾“å‡ºï¼šæ— 
+* ÃèÊö£º¼Ì³Ğ×Ô¸¸Àà£¬³éÏóÀà¸´Ğ´£¬±ê¶¨ÔªËØ·¶Î§£¬°´100cm¼ÆËã
+* ÊäÈë£ºÎŞ
+* Êä³ö£ºÎŞ
 */
 QRectF Robot::boundingRect() const
 {
@@ -61,10 +61,10 @@ QRectF Robot::boundingRect() const
 }
 
 /* setPosition
-* æè¿°ï¼šè®¾å®šrobotä¸­å¿ƒä½ç½®ï¼Œå•ä½m
-* è¾“å…¥ï¼šx - Xè½´ä½ç½®
-*      y - Yè½´ä½ç½®
-* è¾“å‡ºï¼šæ— 
+* ÃèÊö£ºÉè¶¨robotÖĞĞÄÎ»ÖÃ£¬µ¥Î»m
+* ÊäÈë£ºx - XÖáÎ»ÖÃ
+*      y - YÖáÎ»ÖÃ
+* Êä³ö£ºÎŞ
 */
 void Robot::setCoordinate(float x, float y, float theta)
 {
@@ -91,10 +91,10 @@ void Robot::setCoordinateTheta(float theta)
 	this->theta = theta;
 }
 /* setMapType
-* æè¿°ï¼šè®¾ç½®çƒåœºç±»å‹
-* è¾“å…¥ï¼šmapType - 0ï¼šå·¦åŠåœº
-*                1ï¼šå³åŠåœº
-* è¾“å‡ºï¼šæ— 
+* ÃèÊö£ºÉèÖÃÇò³¡ÀàĞÍ
+* ÊäÈë£ºmapType - 0£º×ó°ë³¡
+*                1£ºÓÒ°ë³¡
+* Êä³ö£ºÎŞ
 */
 void Robot::setMapType(int mapType)
 {

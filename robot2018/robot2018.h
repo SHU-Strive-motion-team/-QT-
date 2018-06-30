@@ -18,11 +18,11 @@ public:
 	QPainterPath shape() const;
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);
 	QRectF boundingRect() const;
-	void setCoordinate(float x = 0, float y = 0, float theta = 0);        //è®¾ç½®åæ ‡ï¼Œå•ä½m
+	void setCoordinate(float x = 0, float y = 0, float theta = 0);        //ÉèÖÃ×ø±ê£¬µ¥Î»m
 	void setCoordinateX(float x);
 	void setCoordinateY(float y);
 	void setCoordinateTheta(float theta);
-	void setMapType(int mapType);               //è®¾ç½®çƒåœºç±»å‹
+	void setMapType(int mapType);               //ÉèÖÃÇò³¡ÀàĞÍ
 	float getXOfCoordinate();
 	float getYOfCoordinate();
 	float getTheta();
@@ -31,27 +31,27 @@ public:
 	//  float getSpeedw();
 	//  float getTheta_dev();
 	//  float getTheta_offset();
-	float pwm[3];       //è½®å­çš„pwm
-	float w[3];		//ç¼–ç å™¨çš„å®é™…è®¡æ•°/4
-	float v[3];		//ç¼–ç å™¨çš„é€Ÿåº¦
-	float Vx = 0;		//æœºå™¨äººåœ¨åæ ‡ç³»xæ–¹å‘çš„é€Ÿåº¦
-	float Vy = 0;		//æœºå™¨äººåœ¨åæ ‡ç³»yæ–¹å‘çš„é€Ÿåº¦
-	float W = 0;		//æœºå™¨äººè§’é€Ÿåº¦,é¡ºæ—¶é’ˆæ–¹å‘
-	float theta_dev = 0;	//ä¸Šä¸€æ—¶åˆ»æœºå™¨äººthetaè§’
-	float theta_offset = 0;	//è§’åº¦åå·®çŸ«æ­£
+	float pwm[3];       //ÂÖ×ÓµÄpwm
+	float w[3];		//±àÂëÆ÷µÄÊµ¼Ê¼ÆÊı/4
+	float v[3];		//±àÂëÆ÷µÄËÙ¶È
+	float Vx = 0;		//»úÆ÷ÈËÔÚ×ø±êÏµx·½ÏòµÄËÙ¶È
+	float Vy = 0;		//»úÆ÷ÈËÔÚ×ø±êÏµy·½ÏòµÄËÙ¶È
+	float W = 0;		//»úÆ÷ÈË½ÇËÙ¶È,Ë³Ê±Õë·½Ïò
+	float theta_dev = 0;	//ÉÏÒ»Ê±¿Ì»úÆ÷ÈËtheta½Ç
+	float theta_offset = 0;	//½Ç¶ÈÆ«²î½ÃÕı
 
 private:
-	float xOfMap;           //åƒç´ 
+	float xOfMap;           //ÏñËØ
 	float yOfMap;
 	float theta;
-	float xOfCoordinate;    //åæ ‡
+	float xOfCoordinate;    //×ø±ê
 	float yOfCoordinate;
 
 
 
-	float centerYOfMap;     //èµ·å§‹ä½ç½®åƒç´ 
+	float centerYOfMap;     //ÆğÊ¼Î»ÖÃÏñËØ
 	float centerXOfMap;
-	int mapType;            //çƒåœºç±»å‹ï¼Œ0-å·¦åŠåœºï¼Œ1-å³åŠåœº
+	int mapType;            //Çò³¡ÀàĞÍ£¬0-×ó°ë³¡£¬1-ÓÒ°ë³¡
 	RobotController &controller;
 };
 

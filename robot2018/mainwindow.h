@@ -70,14 +70,14 @@ private:
 
 
 	Ui::MainWindow *ui;
-	QPixmap *pixmap;            //åœ°å›¾æ˜¾ç¤ºåŒºåŸŸ
+	QPixmap *pixmap;            //µØÍ¼ÏÔÊ¾ÇøÓò
 	QGraphicsScene *scene;
 	QGraphicsView *view;
 
 	RobotController *controller;
-	int mapType;                //åœºåœ°ç±»å‹ï¼Œ0-å·¦åŠåœºï¼Œ1-å³åŠåœº
+	int mapType;                //³¡µØÀàĞÍ£¬0-×ó°ë³¡£¬1-ÓÒ°ë³¡
 
-	QSerialPort *comPort;       //ä¸²å£è¿æ¥æŒ‡é’ˆ
+	QSerialPort *comPort;       //´®¿ÚÁ¬½ÓÖ¸Õë
 	int comStat;
 
 	QTimer * timer;
