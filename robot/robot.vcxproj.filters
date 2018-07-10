@@ -33,49 +33,35 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="robot2018.cpp">
+    <ClCompile Include="MyMainWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mainwindow.cpp">
+    <ClCompile Include="Receive.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="robotcontroller.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="thread.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="tcpsocket.cpp">
+    <ClCompile Include="robot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="mainwindow.h">
+    <QtMoc Include="MyMainWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="robotcontroller.h">
+    <QtMoc Include="Receive.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="thread.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="tcpsocket.h">
+    <QtMoc Include="robot.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="mainwindow.ui">
+    <QtUic Include="MyMainWindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="robot2018.qrc">
+    <QtRcc Include="MyMainWindow.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="robot2018.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

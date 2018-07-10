@@ -1,12 +1,10 @@
-#include "robot2018.h"
-#include "mainwindow.h"
-
+#include "MyMainWindow.h"
 #include <QtWidgets/QApplication>
 
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	MainWindow w;
+	MyMainWindow w;
 	w.show();
 	return a.exec();
 }

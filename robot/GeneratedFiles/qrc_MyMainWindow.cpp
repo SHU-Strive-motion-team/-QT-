@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Resource object code
 **
-** Created by: The Resource Compiler for Qt version 5.10.1
+** Created by: The Resource Compiler for Qt version 5.9.2
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -26,21 +26,21 @@ namespace QT_NAMESPACE {
 }
 #endif
 
-int QT_RCC_MANGLE_NAMESPACE(qInitResources_robot2018)();
-int QT_RCC_MANGLE_NAMESPACE(qInitResources_robot2018)()
+int QT_RCC_MANGLE_NAMESPACE(qInitResources_MyMainWindow)();
+int QT_RCC_MANGLE_NAMESPACE(qInitResources_MyMainWindow)()
 {
     return 1;
 }
 
-int QT_RCC_MANGLE_NAMESPACE(qCleanupResources_robot2018)();
-int QT_RCC_MANGLE_NAMESPACE(qCleanupResources_robot2018)()
+int QT_RCC_MANGLE_NAMESPACE(qCleanupResources_MyMainWindow)();
+int QT_RCC_MANGLE_NAMESPACE(qCleanupResources_MyMainWindow)()
 {
     return 1;
 }
 
 namespace {
    struct initializer {
-       initializer() { QT_RCC_MANGLE_NAMESPACE(qInitResources_robot2018)(); }
-       ~initializer() { QT_RCC_MANGLE_NAMESPACE(qCleanupResources_robot2018)(); }
+       initializer() { QT_RCC_MANGLE_NAMESPACE(qInitResources_MyMainWindow)(); }
+       ~initializer() { QT_RCC_MANGLE_NAMESPACE(qCleanupResources_MyMainWindow)(); }
    } dummy;
 }
