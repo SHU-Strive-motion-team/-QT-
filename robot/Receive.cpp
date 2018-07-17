@@ -7,6 +7,7 @@ Receive::Receive(QSerialPort* p):receiveSerialPort(p)
 Receive::~Receive()
 {
 	receiveSerialPort->deleteLater();
+	delete Data;
 }
 
 
@@ -74,7 +75,7 @@ bool Receive::isStart()
 	return Start;
 }
 
-QByteArray Receive::getData()
+int * Receive::getData()
 {
 	return Data;
 }
@@ -83,19 +84,22 @@ void Receive::receiveFail()
 {
 	Start = false;
 	Success = false;
-	Data.clear();
 	originalData.clear();
 	Sum = 0;
 }
 
 void Receive::receiveSuccessful(void)
 {
-	Data.clear();
-
-	Data += originalData[4];
-	Data += originalData[6];
-	Data += originalData[8];
-
+	for (int i = 0; i < 3; i++)
+	{
+		Data[i] = 0;
+	}
+	
+	Data[0] = ((originalData.at(3) << 8) | (originalData.at(4) & 0xff)) & 0xffff;
+	Data[1] = ((originalData.at(5) << 8) | (originalData.at(6) & 0xff)) & 0xffff;
+	Data[2] = ((originalData.at(7) << 8) | (originalData.at(8) & 0xff)) & 0xffff;
+	qDebug() << QString::number(originalData.at(8),16) << endl;
+	qDebug() << QString::number(Data[2],10) << endl;
 	Success = true;
 	Start = false;
 	Type = RECTYPE(originalData.at(2));

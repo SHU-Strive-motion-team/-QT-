@@ -42,6 +42,12 @@
     <ClCompile Include="robot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="radar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cradar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="MyMainWindow.h">
@@ -51,6 +57,12 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="robot.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="radar.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="cradar.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -63,5 +75,15 @@
     <QtRcc Include="MyMainWindow.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="rplidar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="rplidar_driver.lib">
+      <Filter>Source Files</Filter>
+    </Library>
   </ItemGroup>
 </Project>

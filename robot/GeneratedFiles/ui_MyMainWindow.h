@@ -28,6 +28,7 @@
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
+#include "cradar.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -41,11 +42,11 @@ public:
     QVBoxLayout *verticalLayout_3;
     QFrame *line_5;
     QGridLayout *gridLayout;
-    QLabel *label_26;
+    QComboBox *comboBox_com;
     QLabel *label_25;
+    QLabel *label_26;
     QComboBox *comboBox_baud;
     QLabel *label_27;
-    QComboBox *comboBox_com;
     QLabel *label_28;
     QHBoxLayout *horizontalLayout_10;
     QPushButton *pushButton_uart_rfresh;
@@ -78,11 +79,11 @@ public:
     QLabel *label_9;
     QHBoxLayout *horizontalLayout_3;
     QLabel *label_10;
-    QLineEdit *lineEdit_V1_2;
+    QLineEdit *lineEdit_Vx;
     QLabel *label_11;
-    QLineEdit *lineEdit_V2_2;
+    QLineEdit *lineEdit_Vy;
     QLabel *label_12;
-    QLineEdit *lineEdit_V3_2;
+    QLineEdit *lineEdit_Vw;
     QLabel *label_7;
     QHBoxLayout *horizontalLayout_2;
     QLabel *label_5;
@@ -111,6 +112,23 @@ public:
     QFrame *line_3;
     QWidget *horizontalLayoutWidget;
     QHBoxLayout *horizontalLayout_11;
+    QWidget *layoutWidget1;
+    QVBoxLayout *verticalLayout_4;
+    QLabel *label_29;
+    QGridLayout *gridLayout_2;
+    QComboBox *comboBox_com_radar;
+    QLabel *label_32;
+    QLabel *label_30;
+    QHBoxLayout *horizontalLayout_13;
+    QPushButton *pushButton_uart_rfresh_r;
+    QPushButton *pushButton_uart_sw_r;
+    QHBoxLayout *horizontalLayout_12;
+    QLabel *label_33;
+    QLineEdit *lineEdit_radar_angle;
+    QSpacerItem *horizontalSpacer_2;
+    QLabel *label_34;
+    QLineEdit *lineEdit_radar_d;
+    CRadar *widget_radar;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -119,12 +137,12 @@ public:
     {
         if (MyMainWindowClass->objectName().isEmpty())
             MyMainWindowClass->setObjectName(QStringLiteral("MyMainWindowClass"));
-        MyMainWindowClass->resize(1218, 692);
+        MyMainWindowClass->resize(1241, 661);
         centralWidget = new QWidget(MyMainWindowClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         layoutWidget = new QWidget(centralWidget);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(20, 60, 421, 539));
+        layoutWidget->setGeometry(QRect(420, 10, 411, 571));
         horizontalLayout_9 = new QHBoxLayout(layoutWidget);
         horizontalLayout_9->setSpacing(6);
         horizontalLayout_9->setContentsMargins(11, 11, 11, 11);
@@ -150,16 +168,21 @@ public:
         gridLayout = new QGridLayout();
         gridLayout->setSpacing(6);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
-        label_26 = new QLabel(layoutWidget);
-        label_26->setObjectName(QStringLiteral("label_26"));
+        comboBox_com = new QComboBox(layoutWidget);
+        comboBox_com->setObjectName(QStringLiteral("comboBox_com"));
 
-        gridLayout->addWidget(label_26, 1, 0, 1, 1);
+        gridLayout->addWidget(comboBox_com, 1, 1, 1, 1);
 
         label_25 = new QLabel(layoutWidget);
         label_25->setObjectName(QStringLiteral("label_25"));
         label_25->setAlignment(Qt::AlignCenter);
 
         gridLayout->addWidget(label_25, 0, 0, 1, 2);
+
+        label_26 = new QLabel(layoutWidget);
+        label_26->setObjectName(QStringLiteral("label_26"));
+
+        gridLayout->addWidget(label_26, 1, 0, 1, 1);
 
         comboBox_baud = new QComboBox(layoutWidget);
         comboBox_baud->setObjectName(QStringLiteral("comboBox_baud"));
@@ -170,11 +193,6 @@ public:
         label_27->setObjectName(QStringLiteral("label_27"));
 
         gridLayout->addWidget(label_27, 2, 0, 1, 1);
-
-        comboBox_com = new QComboBox(layoutWidget);
-        comboBox_com->setObjectName(QStringLiteral("comboBox_com"));
-
-        gridLayout->addWidget(comboBox_com, 1, 1, 1, 1);
 
         label_28 = new QLabel(layoutWidget);
         label_28->setObjectName(QStringLiteral("label_28"));
@@ -212,6 +230,7 @@ public:
         verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
         label_21 = new QLabel(layoutWidget);
         label_21->setObjectName(QStringLiteral("label_21"));
+        label_21->setMinimumSize(QSize(0, 25));
         label_21->setAlignment(Qt::AlignCenter);
 
         verticalLayout_2->addWidget(label_21);
@@ -296,6 +315,7 @@ public:
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         label_8 = new QLabel(layoutWidget);
         label_8->setObjectName(QStringLiteral("label_8"));
+        label_8->setMinimumSize(QSize(0, 25));
         label_8->setAlignment(Qt::AlignCenter);
 
         verticalLayout->addWidget(label_8);
@@ -350,30 +370,30 @@ public:
 
         horizontalLayout_3->addWidget(label_10);
 
-        lineEdit_V1_2 = new QLineEdit(layoutWidget);
-        lineEdit_V1_2->setObjectName(QStringLiteral("lineEdit_V1_2"));
+        lineEdit_Vx = new QLineEdit(layoutWidget);
+        lineEdit_Vx->setObjectName(QStringLiteral("lineEdit_Vx"));
 
-        horizontalLayout_3->addWidget(lineEdit_V1_2);
+        horizontalLayout_3->addWidget(lineEdit_Vx);
 
         label_11 = new QLabel(layoutWidget);
         label_11->setObjectName(QStringLiteral("label_11"));
 
         horizontalLayout_3->addWidget(label_11);
 
-        lineEdit_V2_2 = new QLineEdit(layoutWidget);
-        lineEdit_V2_2->setObjectName(QStringLiteral("lineEdit_V2_2"));
+        lineEdit_Vy = new QLineEdit(layoutWidget);
+        lineEdit_Vy->setObjectName(QStringLiteral("lineEdit_Vy"));
 
-        horizontalLayout_3->addWidget(lineEdit_V2_2);
+        horizontalLayout_3->addWidget(lineEdit_Vy);
 
         label_12 = new QLabel(layoutWidget);
         label_12->setObjectName(QStringLiteral("label_12"));
 
         horizontalLayout_3->addWidget(label_12);
 
-        lineEdit_V3_2 = new QLineEdit(layoutWidget);
-        lineEdit_V3_2->setObjectName(QStringLiteral("lineEdit_V3_2"));
+        lineEdit_Vw = new QLineEdit(layoutWidget);
+        lineEdit_Vw->setObjectName(QStringLiteral("lineEdit_Vw"));
 
-        horizontalLayout_3->addWidget(lineEdit_V3_2);
+        horizontalLayout_3->addWidget(lineEdit_Vw);
 
 
         verticalLayout->addLayout(horizontalLayout_3);
@@ -526,17 +546,110 @@ public:
 
         horizontalLayoutWidget = new QWidget(centralWidget);
         horizontalLayoutWidget->setObjectName(QStringLiteral("horizontalLayoutWidget"));
-        horizontalLayoutWidget->setGeometry(QRect(450, 60, 261, 181));
+        horizontalLayoutWidget->setGeometry(QRect(870, 90, 261, 181));
         horizontalLayout_11 = new QHBoxLayout(horizontalLayoutWidget);
         horizontalLayout_11->setSpacing(6);
         horizontalLayout_11->setContentsMargins(11, 11, 11, 11);
         horizontalLayout_11->setObjectName(QStringLiteral("horizontalLayout_11"));
         horizontalLayout_11->setSizeConstraint(QLayout::SetFixedSize);
         horizontalLayout_11->setContentsMargins(0, 0, 0, 0);
+        layoutWidget1 = new QWidget(centralWidget);
+        layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
+        layoutWidget1->setGeometry(QRect(20, 14, 352, 495));
+        verticalLayout_4 = new QVBoxLayout(layoutWidget1);
+        verticalLayout_4->setSpacing(6);
+        verticalLayout_4->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_4->setObjectName(QStringLiteral("verticalLayout_4"));
+        verticalLayout_4->setSizeConstraint(QLayout::SetDefaultConstraint);
+        verticalLayout_4->setContentsMargins(0, 0, 0, 0);
+        label_29 = new QLabel(layoutWidget1);
+        label_29->setObjectName(QStringLiteral("label_29"));
+        label_29->setMinimumSize(QSize(0, 30));
+        label_29->setAlignment(Qt::AlignCenter);
+
+        verticalLayout_4->addWidget(label_29);
+
+        gridLayout_2 = new QGridLayout();
+        gridLayout_2->setSpacing(6);
+        gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
+        comboBox_com_radar = new QComboBox(layoutWidget1);
+        comboBox_com_radar->setObjectName(QStringLiteral("comboBox_com_radar"));
+
+        gridLayout_2->addWidget(comboBox_com_radar, 1, 1, 1, 1);
+
+        label_32 = new QLabel(layoutWidget1);
+        label_32->setObjectName(QStringLiteral("label_32"));
+        label_32->setMinimumSize(QSize(0, 25));
+
+        gridLayout_2->addWidget(label_32, 2, 0, 1, 1);
+
+        label_30 = new QLabel(layoutWidget1);
+        label_30->setObjectName(QStringLiteral("label_30"));
+        label_30->setMinimumSize(QSize(0, 25));
+
+        gridLayout_2->addWidget(label_30, 1, 0, 1, 1);
+
+        horizontalLayout_13 = new QHBoxLayout();
+        horizontalLayout_13->setSpacing(6);
+        horizontalLayout_13->setObjectName(QStringLiteral("horizontalLayout_13"));
+        pushButton_uart_rfresh_r = new QPushButton(layoutWidget1);
+        pushButton_uart_rfresh_r->setObjectName(QStringLiteral("pushButton_uart_rfresh_r"));
+
+        horizontalLayout_13->addWidget(pushButton_uart_rfresh_r);
+
+        pushButton_uart_sw_r = new QPushButton(layoutWidget1);
+        pushButton_uart_sw_r->setObjectName(QStringLiteral("pushButton_uart_sw_r"));
+
+        horizontalLayout_13->addWidget(pushButton_uart_sw_r);
+
+
+        gridLayout_2->addLayout(horizontalLayout_13, 2, 1, 1, 1);
+
+
+        verticalLayout_4->addLayout(gridLayout_2);
+
+        horizontalLayout_12 = new QHBoxLayout();
+        horizontalLayout_12->setSpacing(8);
+        horizontalLayout_12->setObjectName(QStringLiteral("horizontalLayout_12"));
+        label_33 = new QLabel(layoutWidget1);
+        label_33->setObjectName(QStringLiteral("label_33"));
+        label_33->setMinimumSize(QSize(0, 30));
+
+        horizontalLayout_12->addWidget(label_33);
+
+        lineEdit_radar_angle = new QLineEdit(layoutWidget1);
+        lineEdit_radar_angle->setObjectName(QStringLiteral("lineEdit_radar_angle"));
+
+        horizontalLayout_12->addWidget(lineEdit_radar_angle);
+
+        horizontalSpacer_2 = new QSpacerItem(60, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_12->addItem(horizontalSpacer_2);
+
+        label_34 = new QLabel(layoutWidget1);
+        label_34->setObjectName(QStringLiteral("label_34"));
+
+        horizontalLayout_12->addWidget(label_34);
+
+        lineEdit_radar_d = new QLineEdit(layoutWidget1);
+        lineEdit_radar_d->setObjectName(QStringLiteral("lineEdit_radar_d"));
+
+        horizontalLayout_12->addWidget(lineEdit_radar_d);
+
+
+        verticalLayout_4->addLayout(horizontalLayout_12);
+
+        widget_radar = new CRadar(layoutWidget1);
+        widget_radar->setObjectName(QStringLiteral("widget_radar"));
+        widget_radar->setMinimumSize(QSize(350, 350));
+        widget_radar->setMaximumSize(QSize(350, 350));
+
+        verticalLayout_4->addWidget(widget_radar);
+
         MyMainWindowClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MyMainWindowClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1218, 25));
+        menuBar->setGeometry(QRect(0, 0, 1241, 22));
         MyMainWindowClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MyMainWindowClass);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -554,13 +667,13 @@ public:
     void retranslateUi(QMainWindow *MyMainWindowClass)
     {
         MyMainWindowClass->setWindowTitle(QApplication::translate("MyMainWindowClass", "MyMainWindow", Q_NULLPTR));
-        label_26->setText(QApplication::translate("MyMainWindowClass", "\351\200\211\346\213\251", Q_NULLPTR));
         label_25->setText(QApplication::translate("MyMainWindowClass", "\344\270\262\345\217\243\351\200\232\350\256\257", Q_NULLPTR));
+        label_26->setText(QApplication::translate("MyMainWindowClass", "\351\200\211\346\213\251", Q_NULLPTR));
         comboBox_baud->clear();
         comboBox_baud->insertItems(0, QStringList()
+         << QApplication::translate("MyMainWindowClass", "115200", Q_NULLPTR)
          << QApplication::translate("MyMainWindowClass", "9600", Q_NULLPTR)
          << QApplication::translate("MyMainWindowClass", "38400", Q_NULLPTR)
-         << QApplication::translate("MyMainWindowClass", "115200", Q_NULLPTR)
         );
         label_27->setText(QApplication::translate("MyMainWindowClass", "\346\263\242\347\211\271\347\216\207", Q_NULLPTR));
         label_28->setText(QApplication::translate("MyMainWindowClass", "\346\223\215\344\275\234", Q_NULLPTR));
@@ -619,6 +732,13 @@ public:
         label_18->setText(QApplication::translate("MyMainWindowClass", "A:", Q_NULLPTR));
         label_19->setText(QApplication::translate("MyMainWindowClass", "B:", Q_NULLPTR));
         label_20->setText(QApplication::translate("MyMainWindowClass", "C:", Q_NULLPTR));
+        label_29->setText(QApplication::translate("MyMainWindowClass", "\351\233\267\350\276\276\344\270\262\345\217\243\351\200\211\346\213\251", Q_NULLPTR));
+        label_32->setText(QApplication::translate("MyMainWindowClass", "\346\223\215\344\275\234", Q_NULLPTR));
+        label_30->setText(QApplication::translate("MyMainWindowClass", "\351\200\211\346\213\251", Q_NULLPTR));
+        pushButton_uart_rfresh_r->setText(QApplication::translate("MyMainWindowClass", "\345\210\267\346\226\260", Q_NULLPTR));
+        pushButton_uart_sw_r->setText(QApplication::translate("MyMainWindowClass", "\345\274\200\345\247\213", Q_NULLPTR));
+        label_33->setText(QApplication::translate("MyMainWindowClass", "\350\247\222\345\272\246\357\274\232", Q_NULLPTR));
+        label_34->setText(QApplication::translate("MyMainWindowClass", "\350\267\235\347\246\273\357\274\232", Q_NULLPTR));
     } // retranslateUi
 
 };

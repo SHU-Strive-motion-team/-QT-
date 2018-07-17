@@ -18,7 +18,7 @@ public:
 
 	bool isSuccess();
 	bool isStart();
-	QByteArray getData();
+	int *getData();
 
 
 	enum RECTYPE
@@ -36,7 +36,7 @@ signals:
 
 private:
 	QSerialPort *receiveSerialPort;
-	QByteArray Data;
+	int *Data = new int[3];
 	QByteArray originalData;
 	bool Success = false;
 	bool Start = false;
