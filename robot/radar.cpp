@@ -167,12 +167,15 @@ void radar::getNearest()
 
 		if (rad < 5.23599f && rad>4.18879f)
 		{
-			//取最近点
-			if (min_dep > _scan_data[pos].dist)
+			if (_scan_data[pos].dist > 10)
 			{
-				min_dep = _scan_data[pos].dist;
-				min_ang = _scan_data[pos].angle;
-			}
+				//取最近点
+				if (min_dep > _scan_data[pos].dist)
+				{
+					min_dep = _scan_data[pos].dist;
+					min_ang = _scan_data[pos].angle;
+				}
+			}			
 			if (_scan_data[pos].dist < 1000)
 			{
 				int offsetX = 350 / 2 + cos(_scan_data[pos].angle*PI / 180.0)*_scan_data[pos].dist / 1000 * 350 / 2;
@@ -182,7 +185,7 @@ void radar::getNearest()
 		}	
 	}
 	Robot->setRadarData(min_ang, min_dep);
-	Robot->uartSendCommand('r', min_ang, min_dep, 0);
+	Robot->sendCommand('r', min_ang, min_dep, 0);
 	radarWidget->showUpdate(m_points);
 
 	//emit completeScan(m_points);

@@ -23,6 +23,8 @@ void robot::setRadarData(float _angle, float dist)
 	Radar.Angle = _angle;
 	Radar.Distance = dist;
 	Radar.State = true;
+
+//	uartSendCommand('r', Radar.Angle, Radar.Angle, 0);
 }
 
 void robot::setVisionData(float _depth, float _x)
@@ -47,7 +49,7 @@ void robot::setRobotV(float _x, float _y, float _yaw)
 *		r À×´ï
 *		v pwm²¨
 */
-void robot::uartSendCommand(char cmd, int pwm1, int pwm2, int pwm3)
+void robot::sendCommand(char cmd, int pwm1, int pwm2, int pwm3)
 {
 	char sendData[10];
 	sendData[0] = '@';

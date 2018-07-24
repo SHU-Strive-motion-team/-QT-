@@ -52,15 +52,17 @@ void MyMainWindow::timerEvent(QTimerEvent * event)
 	if (showTimerId == event->timerId())
 	{
 		showRobotData();
+		//uartSendCommand('r', bRobot->Radar.Angle, bRobot->Radar.Distance, 0);
 	}
 }
-
+//串口初始化
 void MyMainWindow::uartInit(void)
 {
 	currentUartState = UartState::OFF;
 	radarUartState = UartState::OFF;
 	/* 所有当前可用的串口 */
 	ui.comboBox_com->clear();
+	ui.comboBox_com_radar->clear();
 	foreach(auto const &info, QSerialPortInfo::availablePorts())
 	{
 		ui.comboBox_com->addItem(info.portName() + ": " + info.description());
@@ -455,7 +457,7 @@ void MyMainWindow::robotDataUpdate()
 	}
 	else if (uartReceive->Type == Receive::POSITION)
 	{		
-		bRobot->setPosion(uartReceive->getData()[0], uartReceive->getData()[1], uartReceive->getData()[2]);
+		bRobot->setPosion((uartReceive->getData()[0]-14000)/1000.0, (uartReceive->getData()[1] - 14000) / 1000.0, uartReceive->getData()[2]);
 
 		/*ui.lineEdit_x->setText(QString::number(bRobot->X));
 		ui.lineEdit_y->setText(QString::number(bRobot->Y));
