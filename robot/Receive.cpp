@@ -7,11 +7,13 @@ Receive::Receive(QSerialPort* p):receiveSerialPort(p)
 Receive::~Receive()
 {
 	receiveSerialPort->deleteLater();
+	originalData.clear();
+	delete Data;
 }
 
 
-/*ÏÂÎ»»ú¸øÉÏÎ»»ú·¢ËÍĞ­Òé
- *	¿ªÊ¼1	¿ªÊ¼2	¿ØÖÆ×Ö	Êı¾İ1	Êı¾İ1	Êı¾İ2	Êı¾İ2	Êı¾İ3	Êı¾İ3	Ğ£ÑéºÍ
+/*ä¸‹ä½æœºç»™ä¸Šä½æœºå‘é€åè®®
+ *	å¼€å§‹1	å¼€å§‹2	æ§åˆ¶å­—	æ•°æ®1	æ•°æ®1	æ•°æ®2	æ•°æ®2	æ•°æ®3	æ•°æ®3	æ ¡éªŒå’Œ
  *	@(0x40)	^(0x5E)	cmd		H1		L2		H2		L2		H3		L3		sum
  *SUM = 0x40 + 0x5E +cmd+H1+L1+H2+L2+H3+L3
 */ 
@@ -28,12 +30,12 @@ void Receive::ReceiveUartData()
 
 		if (Start)
 		{
-			qDebug() << u8"½ÓÊÕ¿ªÊ¼\n";
+			qDebug() << u8"æ¥æ”¶å¼€å§‹\n";
 			originalData += buf;
 
 			if (originalData.size() == 2)
 			{
-				//µÚ¶ş¸ö²»ÊÇ ^ ÖØĞÂ½ÓÊÕ
+				//ç¬¬äºŒä¸ªä¸æ˜¯ ^ é‡æ–°æ¥æ”¶
 				if (originalData.at(1) != '^')
 				{
 					receiveFail();
@@ -43,7 +45,7 @@ void Receive::ReceiveUartData()
 			if (originalData.size() == 10)
 			{
 				qDebug() << QString::number(Sum, 16) << endl;
-				//½ÓÊÕ³É¹¦
+				//æ¥æ”¶æˆåŠŸ
 				if (Sum == originalData.at(9))
 				{
 					qDebug() << originalData << endl;
@@ -51,14 +53,14 @@ void Receive::ReceiveUartData()
 					receiveSuccessful();
 
 				}
-				//½ÓÊÕÊ§°Ü
+				//æ¥æ”¶å¤±è´¥
 				else
 					receiveFail();
 			}
 			else
 				Sum += buf.at(0);
 		}
-		//½ÓÊÕÊ§°Ü
+		//æ¥æ”¶å¤±è´¥
 		else
 			receiveFail();
 	}

@@ -40,7 +40,7 @@ class robot : public QObject
 	Q_OBJECT
 
 public:
-	robot(QObject *parent, QSerialPort* p);
+	robot(QSerialPort* p);
 	~robot();
 
 	void setPosion(float _x, float _y, float _yaw);
@@ -48,7 +48,7 @@ public:
 	void setVisionData(float _depth, float _x);
 	void setRobotV(float _x, float _y, float _yaw);
 
-	void uartSendCommand(char cmd, int pwm1 = 0, int pwm2 = 0, int pwm3 = 0);
+	void sendCommand(char cmd, int pwm1 = 0, int pwm2 = 0, int pwm3 = 0);
 
 	float X;		//机器人在坐标系中x坐标
 	float Y;		//机器人在坐标系中y坐标

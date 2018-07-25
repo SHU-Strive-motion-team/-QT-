@@ -2,13 +2,12 @@
 #include <signal.h>
 #include "robot.h"
 
+int findballtime;		//æ‰¾çƒæ—¶è°ƒæ•´è§’åº¦çš„æ¬¡æ•°
 
-//robot Robot;
 
-int findballtime;		//ÕÒÇòÊ±µ÷Õû½Ç¶ÈµÄ´ÎÊı
+robot::robot(QSerialPort* p)
+	:sendSerialPort(p)
 
-robot::robot(QObject *parent, QSerialPort* p)
-	: QObject(parent), sendSerialPort(p)
 {
 
 }
@@ -30,6 +29,8 @@ void robot::setRadarData(float _angle, float dist)
 	Radar.Angle = _angle;
 	Radar.Distance = dist;
 	Radar.State = true;
+
+//	uartSendCommand('r', Radar.Angle, Radar.Angle, 0);
 }
 
 void robot::setVisionData(float _depth, float _x)
@@ -46,15 +47,15 @@ void robot::setRobotV(float _x, float _y, float _yaw)
 	W = _yaw;
 }
 
-/*ÉÏÎ»»ú¸øÏÂÎ»»ú·¢ËÍĞ­Òé£¨Êı¾İÎªÈı¸öÂÖ×ÓPWM£©
-*	¿ªÊ¼1	¿ªÊ¼2	¿ØÖÆ×Ö	Êı¾İ1	Êı¾İ1	Êı¾İ2	Êı¾İ2	Êı¾İ3	Êı¾İ3	Ğ£ÑéºÍ
+/*ä¸Šä½æœºç»™ä¸‹ä½æœºå‘é€åè®®ï¼ˆæ•°æ®ä¸ºä¸‰ä¸ªè½®å­PWMï¼‰
+*	å¼€å§‹1	å¼€å§‹2	æ§åˆ¶å­—	æ•°æ®1	æ•°æ®1	æ•°æ®2	æ•°æ®2	æ•°æ®3	æ•°æ®3	æ ¡éªŒå’Œ
 *	@(0x40) ^(0x5E)	cmd		H1		L2		H2		L2		H3		L3		sum
 * SUM = 0x40 + 0x5E + cmd + H1 + L1 + H2 + L2 + H3 + L3
 *  cod:
-*		r À×´ï
-*		v pwm²¨
+*		r é›·è¾¾
+*		v pwmæ³¢
 */
-void robot::uartSendCommand(char cmd, int pwm1, int pwm2, int pwm3)
+void robot::sendCommand(char cmd, int pwm1, int pwm2, int pwm3)
 {
 	char sendData[10];
 	sendData[0] = '@';
@@ -72,38 +73,40 @@ void robot::uartSendCommand(char cmd, int pwm1, int pwm2, int pwm3)
 	qDebug() << int(sendData[9]) << endl;
 
 	sendSerialPort->write(sendData, 10);
+
+	//parent
 }
 
-//»úÆ÷ÈË³õÊ¼»¯º¯Êı
-//ÔÚ½çÃæÉÏÏÔÊ¾ÏàÓ¦ĞÅÏ¢
+//æœºå™¨äººåˆå§‹åŒ–å‡½æ•°
+//åœ¨ç•Œé¢ä¸Šæ˜¾ç¤ºç›¸åº”ä¿¡æ¯
 void robot::Control_Init(void)
 {
-	X = 0;		//»úÆ÷ÈËÔÚ×ø±êÏµÖĞx×ø±ê
-	Y = 0;		//»úÆ÷ÈËÔÚ×ø±êÏµÖĞy×ø±ê
-	ThetaD = 0;		//»úÆ÷ÈËÕı·½ÏòÓëyÖá¼Ğ½Ç ½Ç¶È
-	ThetaR = 0;		//»úÆ÷ÈËÕı·½ÏòÓëyÖá¼Ğ½Ç »¡¶È
-//	Robot.PX = 0;			//ÁÙÊ±µãx×ø±ê
-//	Robot.PY = 0;			//ÁÙÊ±µãy×ø±ê
-	Vx = 0;		//»úÆ÷ÈËÔÚ×ø±êÏµÖĞx·½ÏòËÙ¶È
-	Vy = 0;		//»úÆ÷ÈËÔÚ×ø±êÏµÖĞy·½ÏòËÙ¶È
-	W = 0;		//»úÆ÷ÈË½ÇËÙ¶È£¬Ë³Ê±ÕëÎªÕı·½Ïò
+	X = 0;		//æœºå™¨äººåœ¨åæ ‡ç³»ä¸­xåæ ‡
+	Y = 0;		//æœºå™¨äººåœ¨åæ ‡ç³»ä¸­yåæ ‡
+	ThetaD = 0;		//æœºå™¨äººæ­£æ–¹å‘ä¸yè½´å¤¹è§’ è§’åº¦
+	ThetaR = 0;		//æœºå™¨äººæ­£æ–¹å‘ä¸yè½´å¤¹è§’ å¼§åº¦
+//	Robot.PX = 0;			//ä¸´æ—¶ç‚¹xåæ ‡
+//	Robot.PY = 0;			//ä¸´æ—¶ç‚¹yåæ ‡
+	Vx = 0;		//æœºå™¨äººåœ¨åæ ‡ç³»ä¸­xæ–¹å‘é€Ÿåº¦
+	Vy = 0;		//æœºå™¨äººåœ¨åæ ‡ç³»ä¸­yæ–¹å‘é€Ÿåº¦
+	W = 0;		//æœºå™¨äººè§’é€Ÿåº¦ï¼Œé¡ºæ—¶é’ˆä¸ºæ­£æ–¹å‘
 
-	w[1] = 0;		//µÚÒ»¸ö±àÂëÆ÷Êµ¼Ê¼ÆÊı
-	w[2] = 0;		//µÚ¶ş¸ö±àÂëÆ÷Êµ¼Ê¼ÆÊı
-	w[0] = 0;		//µÚÈı¸ö±àÂëÆ÷Êµ¼Ê¼ÆÊı
+	w[1] = 0;		//ç¬¬ä¸€ä¸ªç¼–ç å™¨å®é™…è®¡æ•°
+	w[2] = 0;		//ç¬¬äºŒä¸ªç¼–ç å™¨å®é™…è®¡æ•°
+	w[0] = 0;		//ç¬¬ä¸‰ä¸ªç¼–ç å™¨å®é™…è®¡æ•°
 
-	v[1] = 0;		//µÚÒ»¸ö±àÂëÆ÷ËùµÃËÙ¶È
-	v[2] = 0;		//µÚ¶ş¸ö±àÂëÆ÷ËùµÃËÙ¶È
-	v[0] = 0;		//µÚÈı¸ö±àÂëÆ÷ËùµÃËÙ¶È
+	v[1] = 0;		//ç¬¬ä¸€ä¸ªç¼–ç å™¨æ‰€å¾—é€Ÿåº¦
+	v[2] = 0;		//ç¬¬äºŒä¸ªç¼–ç å™¨æ‰€å¾—é€Ÿåº¦
+	v[0] = 0;		//ç¬¬ä¸‰ä¸ªç¼–ç å™¨æ‰€å¾—é€Ÿåº¦
 
-	LastTheta = 0;	//ÉÏÒ»Ê±¿Ì»úÆ÷ÈËtheta½Ç
-	theta_offset = 0;		//½Ç¶ÈÆ«²î½ÃÕı
+	LastTheta = 0;	//ä¸Šä¸€æ—¶åˆ»æœºå™¨äººthetaè§’
+	theta_offset = 0;		//è§’åº¦åå·®çŸ«æ­£
 
-	//À×´ïÊı¾İÇå¿Õ
+	//é›·è¾¾æ•°æ®æ¸…ç©º
 	Radar.Distance = 0;
 	Radar.Angle = 0;
 
-	//ÊÓ¾õÊı¾İÇå¿Õ
+	//è§†è§‰æ•°æ®æ¸…ç©º
 	Vision.Depth = 0;
 	Vision.X = 0;
 
@@ -111,12 +114,12 @@ void robot::Control_Init(void)
 
 }
 
-//¸ù¾İÆ«²î´óĞ¡µ÷Õû½ÇËÙ¶È
+//æ ¹æ®åå·®å¤§å°è°ƒæ•´è§’é€Ÿåº¦
 float robot::AdjustAngleV(float D_Theta)
 {
 	float Vw = 0;
 
-	//´óÓÚ30¡ãÏßĞÔ¿ØÖÆ
+	//å¤§äº30Â°çº¿æ€§æ§åˆ¶
 	if (D_Theta>0 && (D_Theta<180))
 	{
 		Vw = D_Theta;
@@ -139,8 +142,8 @@ float robot::AdjustAngleV(float D_Theta)
 	else
 		//Vw=Vw;
 
-		//Ğ¡ÓÚ60¡ã´óÓÚ30¡ãÔÈËÙ
-		//Êµ¼ÊPWMÎª100
+		//å°äº60Â°å¤§äº30Â°åŒ€é€Ÿ
+		//å®é™…PWMä¸º100
 		if (D_Theta < 60)
 		{
 			if (Vw>0)
@@ -149,7 +152,7 @@ float robot::AdjustAngleV(float D_Theta)
 				Vw = -1000;
 		}
 
-	//Ğ¡ÓÚ30¡ã´óÓÚ5¡ã
+	//å°äº30Â°å¤§äº5Â°
 	if (D_Theta < 30)
 	{
 		if (Vw>30)
@@ -157,7 +160,7 @@ float robot::AdjustAngleV(float D_Theta)
 		else
 			Vw = -200;
 	}
-	//Ğ¡ÓÚ5¡ã
+	//å°äº5Â°
 	if (D_Theta < 5)
 	{
 		if (Vw>0)
@@ -171,7 +174,7 @@ float robot::AdjustAngleV(float D_Theta)
 	return Vw;
 }
 
-//¸ù¾İÆ«²î´óĞ¡µ÷ÕûYÖáËÙ¶È
+//æ ¹æ®åå·®å¤§å°è°ƒæ•´Yè½´é€Ÿåº¦
 float robot::AdjustVy(float D_Y)
 {
 	float sy;
@@ -221,7 +224,7 @@ float robot::AdjustVy(float D_Y)
 
 }
 
-//¸ù¾İÆ«²î´óĞ¡µ÷ÕûXÖáËÙ¶È
+//æ ¹æ®åå·®å¤§å°è°ƒæ•´Xè½´é€Ÿåº¦
 float robot::AdjustVx(float D_X)
 {
 	float sx;
@@ -294,7 +297,7 @@ float robot::AdjustVx(float D_X)
 
 }
 
-/*µç»úËÙ¶È×ª»»³ÉPWMÊıÖµ*/
+/*ç”µæœºé€Ÿåº¦è½¬æ¢æˆPWMæ•°å€¼*/
  void robot::Velocity2PWM(float *V)
 {
 	*V = 1000 - *V;//*V+=1000;
@@ -304,41 +307,41 @@ float robot::AdjustVx(float D_X)
 		*V = 100;
 }
 
-//ÉèÖÃÈı¸öÂÖ×ÓPWM²¢·¢ËÍ¸øÏÂÎ»»ú£¬Í¬Ê±ÏÔÊ¾ÔÚ½çÃæÉÏ
-//cmd:	¿ØÖÆ×Ö	R£º¸´Î»ÖØÆô					O:Õı³£×ßµã					F£ºÕÒÇò			
-//				Y£ºÕÒµ½Çò£¬·Å²ù²ùÇò			N£ºÇò²»¼û£¬Éı²ù				Z£º×ÔĞıÔË¶¯		
-//				S£ºÍ£Ö¹¶¯£¬Èı¸öpwmÖµ¶¼Îª0£»	D£ºÑÓÊ±						A£º±ÜÕÏ
-//V1:	µç»ú1ËÙ¶È
-//V2:	µç»ú2ËÙ¶È
-//V3;	µç»ú3ËÙ¶È
+//è®¾ç½®ä¸‰ä¸ªè½®å­PWMå¹¶å‘é€ç»™ä¸‹ä½æœºï¼ŒåŒæ—¶æ˜¾ç¤ºåœ¨ç•Œé¢ä¸Š
+//cmd:	æ§åˆ¶å­—	Rï¼šå¤ä½é‡å¯					O:æ­£å¸¸èµ°ç‚¹					Fï¼šæ‰¾çƒ			
+//				Yï¼šæ‰¾åˆ°çƒï¼Œæ”¾é“²é“²çƒ			Nï¼šçƒä¸è§ï¼Œå‡é“²				Zï¼šè‡ªæ—‹è¿åŠ¨		
+//				Sï¼šåœæ­¢åŠ¨ï¼Œä¸‰ä¸ªpwmå€¼éƒ½ä¸º0ï¼›	Dï¼šå»¶æ—¶						Aï¼šé¿éšœ
+//V1:	ç”µæœº1é€Ÿåº¦
+//V2:	ç”µæœº2é€Ÿåº¦
+//V3;	ç”µæœº3é€Ÿåº¦
 void robot::SetPWM(char cmd, float V1, float V2, float V3)
 {
 	Velocity[0] = V1;
 	Velocity[1] = V2;
 	Velocity[2] = V3;
 
-	//×ª»»
+	//è½¬æ¢
 	Velocity2PWM(&V1);
 	Velocity2PWM(&V2);
 	Velocity2PWM(&V3);
 
-	////½«floatĞÍ×ª»»³ÉQStringÀàĞÍ
+	////å°†floatå‹è½¬æ¢æˆQStringç±»å‹
 	//QString data1 = QString("%1").arg(V1);
 	//QString data2 = QString("%1").arg(V2);
 	//QString data3 = QString("%1").arg(V3);
 
-	////ÏÔÊ¾PWM²¨ÔÚ½çÃæÉÏ
+	////æ˜¾ç¤ºPWMæ³¢åœ¨ç•Œé¢ä¸Š
 	//ui.lineEdit_pwm1->setText(data1);
 	//ui.lineEdit_pwm2->setText(data2);
 	//ui.lineEdit_pwm3->setText(data3);
 
-	//Í¨¹ı´®¿Ú·¢ËÍPWM²¨¸øµ¥Æ¬»ú
+	//é€šè¿‡ä¸²å£å‘é€PWMæ³¢ç»™å•ç‰‡æœº
 	uartSendCommand(cmd, V1, V2, V3);
 
 }
 
-//¸ø¶¨Çò³¡×ø±êËÙ¶ÈÇóµÃÂÖ×ÓµÄËÙ¶È
-//ÏÔÊ¾ÔÚ½çÃæÉÏ
+//ç»™å®šçƒåœºåæ ‡é€Ÿåº¦æ±‚å¾—è½®å­çš„é€Ÿåº¦
+//æ˜¾ç¤ºåœ¨ç•Œé¢ä¸Š
 void robot::GetMotorVelocity(float vx, float vy, float w)
 {
 	unsigned char i, j, k;
@@ -382,20 +385,20 @@ void robot::GetMotorVelocity(float vx, float vy, float w)
 			Velocity[i] += tem[i][j] * V[j];
 	}
 
-	////½«ÂÖ×ÓËÙ¶È´ÓfloatĞÍ×ª»»³ÉQStringĞÍ
+	////å°†è½®å­é€Ÿåº¦ä»floatå‹è½¬æ¢æˆQStringå‹
 	//QString datav1 = QString("%1").arg(Robot.Velocity[0]);
 	//QString datav2 = QString("%1").arg(Robot.Velocity[1]);
 	//QString datav3 = QString("%1").arg(Robot.Velocity[2]);
 
-	////½«ÂÖ×ÓËÙ¶ÈÏÔÊ¾ÔÚ½çÃæÉÏ
+	////å°†è½®å­é€Ÿåº¦æ˜¾ç¤ºåœ¨ç•Œé¢ä¸Š
 	//ui.lineEdit_V1->setText(datav1);
 	//ui.lineEdit_V2->setText(datav2);
 	//ui.lineEdit_V3->setText(datav3);
 
 }
 
-//¸ø¶¨×ÔÉí×ø±êÏµËÙ¶ÈÇóµÃÂÖ×ÓµÄËÙ¶È
-//ÏÔÊ¾ÔÚ½çÃæÉÏ
+//ç»™å®šè‡ªèº«åæ ‡ç³»é€Ÿåº¦æ±‚å¾—è½®å­çš„é€Ÿåº¦
+//æ˜¾ç¤ºåœ¨ç•Œé¢ä¸Š
 void robot::GetMotorVelocity_Self(float vx, float vy, float w)
 {
 	unsigned i, j;
@@ -423,22 +426,22 @@ void robot::GetMotorVelocity_Self(float vx, float vy, float w)
 			Velocity[i] += L[i][j] * V[j];
 	}
 
-	////½«ÂÖ×ÓËÙ¶È´ÓfloatĞÍ×ª»»³ÉQStringĞÍ
+	////å°†è½®å­é€Ÿåº¦ä»floatå‹è½¬æ¢æˆQStringå‹
 	//QString datav1 = QString("%1").arg(Robot.Velocity[0]);
 	//QString datav2 = QString("%1").arg(Robot.Velocity[1]);
 	//QString datav3 = QString("%1").arg(Robot.Velocity[2]);
 
-	////½«ÂÖ×ÓËÙ¶ÈÏÔÊ¾ÔÚ½çÃæÉÏ
+	////å°†è½®å­é€Ÿåº¦æ˜¾ç¤ºåœ¨ç•Œé¢ä¸Š
 	//ui.lineEdit_V1->setText(datav1);
 	//ui.lineEdit_V2->setText(datav2);
 	//ui.lineEdit_V3->setText(datav3);
 }
 
-//×ÔĞıÔË¶¯£¬¸ù¾İÎó²î½Ç¶È£¬×Ô¶¯µ÷½Ú
+//è‡ªæ—‹è¿åŠ¨ï¼Œæ ¹æ®è¯¯å·®è§’åº¦ï¼Œè‡ªåŠ¨è°ƒèŠ‚
 void robot::RobotRotate(float theta)
 {
 	float D_Theta;
-	float Vw = 0;        //W´óÓÚ0 ÄæÊ±Õë
+	float Vw = 0;        //Wå¤§äº0 é€†æ—¶é’ˆ
 
 						 //D_Theta = theta-BasketballRobot.ThetaD;
 	D_Theta = theta - 0;
@@ -461,15 +464,15 @@ void robot::RobotRotate(float theta)
 	while (W);
 }
 
-//ĞĞÖÁÖ¸¶¨×ø±ê
-//X_I£º	Ä¿±ê×ø±êµÄX
-//Y_I:	Ä¿±ê×ø±êµÄY
-//Theta_I:	Ä¿±ê×ø±êµÄ½Ç¶È
+//è¡Œè‡³æŒ‡å®šåæ ‡
+//X_Iï¼š	ç›®æ ‡åæ ‡çš„X
+//Y_I:	ç›®æ ‡åæ ‡çš„Y
+//Theta_I:	ç›®æ ‡åæ ‡çš„è§’åº¦
 void robot::RobotGoTo(float X_I, float Y_I, float Theta_I)
 {
 	float D_Theta, D_X, D_Y, Vw = 0, sx, sy = 0;
 
-	D_Theta = Theta_I - ThetaD;	//½Ç¶È²î
+	D_Theta = Theta_I - ThetaD;	//è§’åº¦å·®
 	D_X = X_I - X;
 	D_Y = Y_I - Y;
 
@@ -492,13 +495,13 @@ void robot::RobotGoTo(float X_I, float Y_I, float Theta_I)
 
 	SetPWM('S', 0, 0, 0);
 
-	//ÑÓÊ±
+	//å»¶æ—¶
 	uartSendCommand('D', 1000, 0, 0);
 	//delay_ms(1000);
 	RobotRotate(Theta_I);
 }
 
-//±ÜÕÏÖ±ĞĞ
+//é¿éšœç›´è¡Œ
 void robot::RobotGoAvoidance(void)
 {
 	float D_Theta, Distance;
@@ -520,7 +523,7 @@ void robot::RobotGoAvoidance(void)
 			SetPWM('A', Velocity[0], Velocity[1], Velocity[2]);
 		}
 
-		//ÑÓÊ±
+		//å»¶æ—¶
 		uartSendCommand('D', 1000, 0, 0);
 		//delay_ms(1000);
 	}
@@ -544,26 +547,26 @@ void robot::RobotGoAvoidance(void)
 
 }
 
-//ËùÕÒÇòÎªÀºÇò
-//Í¬Ê±ÔÚ½çÃæÉÏÏÔÊ¾¡°ÀºÇò¡±
+//æ‰€æ‰¾çƒä¸ºç¯®çƒ
+//åŒæ—¶åœ¨ç•Œé¢ä¸Šæ˜¾ç¤ºâ€œç¯®çƒâ€
 void robot::FindBasketball(void)
 {
 	//	ball = 1;
 	//	HAL_UART_Transmit(&huart1, &ball, 1, 1000);
-	//ui.comboBox_ball->addItem("ÀºÇò");
+	//ui.comboBox_ball->addItem("ç¯®çƒ");
 }
 
-//ËùÕÒÇòÎªÅÅÇò
-//Í¬Ê±ÔÚ½çÃæÉÏÏÔÊ¾¡°ÅÅÇò¡±
+//æ‰€æ‰¾çƒä¸ºæ’çƒ
+//åŒæ—¶åœ¨ç•Œé¢ä¸Šæ˜¾ç¤ºâ€œæ’çƒâ€
 void robot::FindVolleyball(void)
 {
 	//	ball = 3;
 	//	HAL_UART_Transmit(&huart1, &ball, 1, 1000);
-	//ui.comboBox_ball->addItem("ÅÅÇò");
+	//ui.comboBox_ball->addItem("æ’çƒ");
 }
 
-//ÊÓ¾õÕÒÇò
-//ÏŞÖÆ4Ã×ÒÔÄÚ
+//è§†è§‰æ‰¾çƒ
+//é™åˆ¶4ç±³ä»¥å†…
 void robot::FindBall_vision(unsigned char ball)
 {
 	float w = 200;
@@ -577,16 +580,16 @@ void robot::FindBall_vision(unsigned char ball)
 	{
 	case 1:
 		FindBasketball();
-		uartSendCommand('D', 100, 0, 0);	//ÑÓÊ±	delay_ms(100);
+		uartSendCommand('D', 100, 0, 0);	//å»¶æ—¶	delay_ms(100);
 		FindBasketball();
-		uartSendCommand('D', 100, 0, 0);	//ÑÓÊ±	delay_ms(100);
+		uartSendCommand('D', 100, 0, 0);	//å»¶æ—¶	delay_ms(100);
 		FindBasketball();
 		break;
 	case 3:
 		FindVolleyball();
-		uartSendCommand('D', 100, 0, 0);	//ÑÓÊ±	delay_ms(100);
+		uartSendCommand('D', 100, 0, 0);	//å»¶æ—¶	delay_ms(100);
 		FindVolleyball();
-		uartSendCommand('D', 100, 0, 0);	//ÑÓÊ±	delay_ms(100);
+		uartSendCommand('D', 100, 0, 0);	//å»¶æ—¶	delay_ms(100);
 		FindVolleyball();
 		break;
 	}
@@ -597,29 +600,29 @@ void robot::FindBall_vision(unsigned char ball)
 	//USART1_RX_STA = 0;
 	//receive = 0;
 	do {
-		//µÈ´ıÊı¾İ½ÓÊÕÍê³É
+		//ç­‰å¾…æ•°æ®æ¥æ”¶å®Œæˆ
 		//while (receive != 1);
 
-		//ËùµÃÊı¾İÎŞĞ§
+		//æ‰€å¾—æ•°æ®æ— æ•ˆ
 		if (!Vision.State)
 		{
 			if (time == 0);
 
-			//³¢ÊÔÎå´Î
+			//å°è¯•äº”æ¬¡
 			else if (time++ <5)
 			{
 				//SetPWM(0,0,0);
 				continue;
 			}
-			//³¢ÊÔÎå´ÎºóÈÔÎ´ÕÒµ½Çò
+			//å°è¯•äº”æ¬¡åä»æœªæ‰¾åˆ°çƒ
 			else if (time != 0)
 				time = 0;
 		}
-		//Êı¾İÓĞĞ§
+		//æ•°æ®æœ‰æ•ˆ
 		else
 			time = 1;
 
-		//Ã»ÕÒµ½Çò,×Ô×ª
+		//æ²¡æ‰¾åˆ°çƒ,è‡ªè½¬
 		if (time == 0)
 		{
 			D_theta = ThetaR - theta;
@@ -634,7 +637,7 @@ void robot::FindBall_vision(unsigned char ball)
 			GetMotorVelocity(0, 0, w);
 			SetPWM('Z', Velocity[0], Velocity[1], Velocity[2]);
 
-			//Èç¹ûµ÷Õû100´ÎºóÈÔÎ´ÕÒµ½Çò£¬ÔòÍË³ö
+			//å¦‚æœè°ƒæ•´100æ¬¡åä»æœªæ‰¾åˆ°çƒï¼Œåˆ™é€€å‡º
 			findballtime++;
 			if (findballtime >= 100) {
 				findballtime = 0;
@@ -643,7 +646,7 @@ void robot::FindBall_vision(unsigned char ball)
 			}
 		}
 
-		//ÎŞĞ§Êı¾İ
+		//æ— æ•ˆæ•°æ®
 		else if (Vision.Depth > 4000)
 		{
 			GetMotorVelocity(0, 0, 0);
@@ -652,7 +655,7 @@ void robot::FindBall_vision(unsigned char ball)
 
 		else if ((Vision.X< VISION_MID - 30) && Vision.Depth>1300)
 		{
-			GetMotorVelocity_Self(-5, 10, 0);  //Ô­À´ -50 10 0
+			GetMotorVelocity_Self(-5, 10, 0);  //åŸæ¥ -50 10 0
 			SetPWM('F', Velocity[0], Velocity[1], Velocity[2]);
 		}
 		else if ((Vision.X > VISION_MID + 30) && Vision.Depth > 1300)
@@ -667,12 +670,12 @@ void robot::FindBall_vision(unsigned char ball)
 		}
 		else if ((Vision.X< VISION_MID - 20) && Vision.Depth > 700)
 		{
-			GetMotorVelocity_Self(-4, 0, 0);  //Ô­À´-40 0 0
+			GetMotorVelocity_Self(-4, 0, 0);  //åŸæ¥-40 0 0
 			SetPWM('F', Velocity[0], Velocity[1], Velocity[2]);
 		}
 		else if ((Vision.X > VISION_MID + 20) && (Vision.Depth >700))
 		{
-			GetMotorVelocity_Self(4, 0, 0); //Ô­À´4 0 0
+			GetMotorVelocity_Self(4, 0, 0); //åŸæ¥4 0 0
 			SetPWM('F', Velocity[0], Velocity[1], Velocity[2]);
 		}
 		else if (Vision.Depth>700)
@@ -682,29 +685,29 @@ void robot::FindBall_vision(unsigned char ball)
 		}
 		else if (Vision.X< VISION_MID - 30)
 		{
-			GetMotorVelocity_Self(-3, 0, 0); //Ô­À´-30 0 0
+			GetMotorVelocity_Self(-3, 0, 0); //åŸæ¥-30 0 0
 			SetPWM('F', Velocity[0], Velocity[1], Velocity[2]);;
 		}
 		else if (Vision.X > VISION_MID + 30)
 		{
-			GetMotorVelocity_Self(3, 0, 0); //Ô­À´30 0 0
+			GetMotorVelocity_Self(3, 0, 0); //åŸæ¥30 0 0
 			SetPWM('F', Velocity[0], Velocity[1], Velocity[2]);
 		}
 		else if (Vision.X <= VISION_MID + 30 && Vision.X > VISION_MID + 10)
 		{
-			GetMotorVelocity_Self(1.5, 0, 0); //Ô­À´15 0 0 
+			GetMotorVelocity_Self(1.5, 0, 0); //åŸæ¥15 0 0 
 			SetPWM('F', Velocity[0], Velocity[1], Velocity[2]);
 		}
 		else if (Vision.X >= VISION_MID - 30 && Vision.X < VISION_MID - 10)
 		{
-			GetMotorVelocity_Self(-1.5, 0, 0); //Ô­À´-15 0 0 
+			GetMotorVelocity_Self(-1.5, 0, 0); //åŸæ¥-15 0 0 
 			SetPWM('F', Velocity[0], Velocity[1], Velocity[2]);
 		}
 		else
 		{
 			SetPWM('S', 0, 0, 0);
 
-			SetPWM('Y', 0, 0, 0);	//·¢ËÍĞÅºÅ¸øµ¥Æ¬»ú£¬²ù×ÓÏÂ½µ Robot_armDown();
+			SetPWM('Y', 0, 0, 0);	//å‘é€ä¿¡å·ç»™å•ç‰‡æœºï¼Œé“²å­ä¸‹é™ Robot_armDown();
 			GetMotorVelocity_Self(0, 7, 0);
 			SetPWM('O', Velocity[0], Velocity[1], Velocity[2]);
 			break;
@@ -712,26 +715,26 @@ void robot::FindBall_vision(unsigned char ball)
 		}
 	} while (1);
 
-	//Èç¹ûÕÒµ½Çò
+	//å¦‚æœæ‰¾åˆ°çƒ
 	if (findballtime2 == 1) {
 
-		//»ñÈ¡ºìÍâ×´Ì¬ GetInfraredState();
+		//è·å–çº¢å¤–çŠ¶æ€ GetInfraredState();
 		while (1)
 		{
 			if (Infr)
 				break;
 		}
 
-		SetPWM('S', 0, 0, 0);	//²ùµ½Çò£¬Í£Ö¹Ç°½ø
+		SetPWM('S', 0, 0, 0);	//é“²åˆ°çƒï¼Œåœæ­¢å‰è¿›
 
-		SetPWM('N', 0, 0, 0);	//²ùµ½Çò£¬Éı²ù Robot_armUp();
+		SetPWM('N', 0, 0, 0);	//é“²åˆ°çƒï¼Œå‡é“² Robot_armUp();
 	}
 
 }
 
-//ÀûÓÃ¼¤¹âÕÒÇò
-//²»ÓÃÇø·ÖÑÕÉ«
-//ÏŞÖÆ3mÒÔÄÚ
+//åˆ©ç”¨æ¿€å…‰æ‰¾çƒ
+//ä¸ç”¨åŒºåˆ†é¢œè‰²
+//é™åˆ¶3mä»¥å†…
 void robot::FindBall_radar(void)
 {
 	float w = 300;
@@ -797,18 +800,18 @@ void robot::FindBall_radar(void)
 		}
 		else if (Radar.Angle< RADAR_MID - 5)
 		{
-			GetMotorVelocity_Self(-8, 0, 0); //Ô­À´-80 0 0
+			GetMotorVelocity_Self(-8, 0, 0); //åŸæ¥-80 0 0
 			SetPWM('O', Velocity[0], Velocity[1], Velocity[2]);
 		}
 		else if (Radar.Angle > RADAR_MID + 5)
 		{
-			GetMotorVelocity_Self(8, 0, 0);//Ô­À´80 0 0
+			GetMotorVelocity_Self(8, 0, 0);//åŸæ¥80 0 0
 			SetPWM('O', Velocity[0], Velocity[1], Velocity[2]);
 		}
 		else
 		{
 			SetPWM('O', Velocity[0], Velocity[1], Velocity[2]);
-			SetPWM('Y', 0, 0, 0);	//·¢ËÍĞÅºÅ¸øµ¥Æ¬»ú£¬²ù×ÓÏÂ½µ Robot_armDown();
+			SetPWM('Y', 0, 0, 0);	//å‘é€ä¿¡å·ç»™å•ç‰‡æœºï¼Œé“²å­ä¸‹é™ Robot_armDown();
 			GetMotorVelocity_Self(0, 7, 0);
 			SetPWM('O', Velocity[0], Velocity[1], Velocity[2]);
 			if (Radar.Distance < 350)
@@ -816,7 +819,7 @@ void robot::FindBall_radar(void)
 		}
 	} while (1);
 
-	//»ñÈ¡ºìÍâ×´Ì¬ GetInfraredState();
+	//è·å–çº¢å¤–çŠ¶æ€ GetInfraredState();
 	while (1)
 	{
 		if (Infr)
@@ -825,12 +828,12 @@ void robot::FindBall_radar(void)
 
 	SetPWM('S', 0, 0, 0);
 
-	SetPWM('N', 0, 0, 0);	//²ùµ½Çò£¬Éı²ù Robot_armUp();
+	SetPWM('N', 0, 0, 0);	//é“²åˆ°çƒï¼Œå‡é“² Robot_armUp();
 
 }
 
-//ÊÓ¾õ¡¢À×´ïÕÒÇò½áºÏ
-//ÏŞÖÆ4mÒÔÄÚ
+//è§†è§‰ã€é›·è¾¾æ‰¾çƒç»“åˆ
+//é™åˆ¶4mä»¥å†…
 void robot::FindBall_VandR(unsigned char ball)
 {
 
@@ -842,18 +845,18 @@ void robot::FindBall_VandR(unsigned char ball)
 	{
 	case 1:
 		FindBasketball();
-		uartSendCommand('D', 10000, 0, 0);	//ÑÓÊ±	delay_ms(10000);
+		uartSendCommand('D', 10000, 0, 0);	//å»¶æ—¶	delay_ms(10000);
 		FindBasketball();
-		uartSendCommand('D', 10000, 0, 0);	//ÑÓÊ±	delay_ms(10000);
+		uartSendCommand('D', 10000, 0, 0);	//å»¶æ—¶	delay_ms(10000);
 		FindBasketball();
 		break;
 	case 3:
 		FindVolleyball();
 
-		uartSendCommand('D', 10000, 0, 0);	//ÑÓÊ±	delay_ms(10000);
+		uartSendCommand('D', 10000, 0, 0);	//å»¶æ—¶	delay_ms(10000);
 
 		FindVolleyball();
-		uartSendCommand('D', 10000, 0, 0);	//ÑÓÊ±	delay_ms(10000);
+		uartSendCommand('D', 10000, 0, 0);	//å»¶æ—¶	delay_ms(10000);
 		FindVolleyball();
 
 		break;
@@ -862,18 +865,18 @@ void robot::FindBall_VandR(unsigned char ball)
 	}
 	SetPWM('S', 0, 0, 0);
 
-	//Çå¿ÕÊÓ¾õ´®¿ÚÊı¾İ
+	//æ¸…ç©ºè§†è§‰ä¸²å£æ•°æ®
 	//	while (receive != 1);
 	//	USART1_RX_STA = 0;
 	//	receive = 0;
 
-	//Çå¿Õ´®¿Ú½ÓÊÕÊı¾İ»º´æ   
+	//æ¸…ç©ºä¸²å£æ¥æ”¶æ•°æ®ç¼“å­˜   
 	//	receive3 = 0;
 	//	USART3_RX_STA = 0;
 
 	SetPWM('S', 0, 0, 0);
 
-	//·ÀÖ¹ÎŞĞ§Êı¾İ
+	//é˜²æ­¢æ— æ•ˆæ•°æ®
 
 	//	while (receive3 != 1);
 	//	receive3 = 0;
@@ -917,7 +920,7 @@ void robot::FindBall_VandR(unsigned char ball)
 			SetPWM('O', Velocity[0], Velocity[1], Velocity[2]);
 			findballtime++;
 
-			//Èç¹ûµ÷Õû100´ÎÈÔÎ´ÕÒµ½Çò£¬ÔòÍË³ö
+			//å¦‚æœè°ƒæ•´100æ¬¡ä»æœªæ‰¾åˆ°çƒï¼Œåˆ™é€€å‡º
 			if (findballtime >= 100) {
 				findballtime = 0;
 				//				findballtime2=0;
@@ -931,12 +934,12 @@ void robot::FindBall_VandR(unsigned char ball)
 		}
 		else if ((Vision.X< VISION_MID - 30) && Vision.Depth>1000)
 		{
-			GetMotorVelocity_Self(-8, 16, 0); //Ô­À´-5 10 0
+			GetMotorVelocity_Self(-8, 16, 0); //åŸæ¥-5 10 0
 			SetPWM('O', Velocity[0], Velocity[1], Velocity[2]);
 		}
 		else if ((Vision.X > VISION_MID + 30) && Vision.Depth > 1000)
 		{
-			GetMotorVelocity_Self(8, 16, 0);//Ô­À´ 5 10 0
+			GetMotorVelocity_Self(8, 16, 0);//åŸæ¥ 5 10 0
 			SetPWM('O', Velocity[0], Velocity[1], Velocity[2]);
 		}
 		else if (Vision.Depth > 1000)
@@ -951,7 +954,7 @@ void robot::FindBall_VandR(unsigned char ball)
 	if (Radar.Distance>800)
 	{
 		//		LCD_ShowString(30 + 200, 500, 200, 16, 16, "View!");
-		//À×´ïÊı¾İ²»Í¬Ê±£¬°´ÕÕÊÓ¾õÊı¾İÑ°ÕÒ
+		//é›·è¾¾æ•°æ®ä¸åŒæ—¶ï¼ŒæŒ‰ç…§è§†è§‰æ•°æ®å¯»æ‰¾
 		while (1)
 		{
 			//while (receive != 1);
@@ -967,12 +970,12 @@ void robot::FindBall_VandR(unsigned char ball)
 
 			if (Radar.Angle< VISION_MID - 20)
 			{
-				GetMotorVelocity_Self(-6, 0, 0); //Ô­À´-4 0 0
+				GetMotorVelocity_Self(-6, 0, 0); //åŸæ¥-4 0 0
 				SetPWM('O', Velocity[0], Velocity[1], Velocity[2]);
 			}
 			else if (Radar.Angle > VISION_MID + 20)
 			{
-				GetMotorVelocity_Self(6, 0, 0);//Ô­À´4 0 0
+				GetMotorVelocity_Self(6, 0, 0);//åŸæ¥4 0 0
 				SetPWM('O', Velocity[0], Velocity[1], Velocity[2]);
 			}
 
@@ -984,26 +987,26 @@ void robot::FindBall_VandR(unsigned char ball)
 
 			else if (Radar.Angle< VISION_MID - 30)
 			{
-				GetMotorVelocity_Self(-6, 0, 0); //Ô­À´-3 0 0
+				GetMotorVelocity_Self(-6, 0, 0); //åŸæ¥-3 0 0
 				SetPWM('O', Velocity[0], Velocity[1], Velocity[2]);
 			}
 			else if (Radar.Angle > VISION_MID + 30)
 			{
-				GetMotorVelocity_Self(6, 0, 0);//Ô­À´ 3 0 0
+				GetMotorVelocity_Self(6, 0, 0);//åŸæ¥ 3 0 0
 				SetPWM('O', Velocity[0], Velocity[1], Velocity[2]);
 
 
 			}
 			else if (Radar.Angle <= VISION_MID + 30 && Radar.Angle > VISION_MID + 10)
 			{
-				GetMotorVelocity_Self(3, 0, 0); //Ô­À´ 1.5 0 0 
+				GetMotorVelocity_Self(3, 0, 0); //åŸæ¥ 1.5 0 0 
 				SetPWM('O', Velocity[0], Velocity[1], Velocity[2]);
 
 
 			}
 			else if (Radar.Angle >= VISION_MID - 30 && Radar.Angle < VISION_MID - 10)
 			{
-				GetMotorVelocity_Self(-3, 0, 0);//Ô­À´-1.5 0 0
+				GetMotorVelocity_Self(-3, 0, 0);//åŸæ¥-1.5 0 0
 				SetPWM('O', Velocity[0], Velocity[1], Velocity[2]);
 
 
@@ -1011,7 +1014,7 @@ void robot::FindBall_VandR(unsigned char ball)
 			else
 			{
 				SetPWM('S', 0, 0, 0);
-				SetPWM('Y', 0, 0, 0);	//·¢ËÍĞÅºÅ¸øµ¥Æ¬»ú£¬²ù×ÓÏÂ½µ Robot_armDown();
+				SetPWM('Y', 0, 0, 0);	//å‘é€ä¿¡å·ç»™å•ç‰‡æœºï¼Œé“²å­ä¸‹é™ Robot_armDown();
 				GetMotorVelocity_Self(0, 7, 0);
 				SetPWM('O', Velocity[0], Velocity[1], Velocity[2]);
 
@@ -1026,7 +1029,7 @@ void robot::FindBall_VandR(unsigned char ball)
 	if (Radar.Distance <= 800)
 	{
 		//LCD_ShowString(30 + 200, 500, 200, 16, 16, "Radar!");
-		//À×´ïÊı¾İÏàÍ¬£¬°´ÕÕÀ×´ïÊı¾İÑ°ÕÒ
+		//é›·è¾¾æ•°æ®ç›¸åŒï¼ŒæŒ‰ç…§é›·è¾¾æ•°æ®å¯»æ‰¾
 		while (1)
 		{
 			//while (receive3 != 1);
@@ -1043,35 +1046,35 @@ void robot::FindBall_VandR(unsigned char ball)
 
 			else if ((Radar.Angle< RADAR_MID - 10) && Radar.Distance >700)
 			{
-				GetMotorVelocity_Self(-10, 0, 0);//Ô­À´-10 0 0
+				GetMotorVelocity_Self(-10, 0, 0);//åŸæ¥-10 0 0
 				SetPWM('O', Velocity[0], Velocity[1], Velocity[2]);
 
 
 			}
 			else if ((Radar.Angle > RADAR_MID + 10) && Radar.Distance >700)
 			{
-				GetMotorVelocity_Self(10, 0, 0); //Ô­À´10 0 0
+				GetMotorVelocity_Self(10, 0, 0); //åŸæ¥10 0 0
 				SetPWM('O', Velocity[0], Velocity[1], Velocity[2]);
 
 
 			}
 			else if (Radar.Distance>700)
 			{
-				GetMotorVelocity_Self(0, 20, 0); //Ô­À´ 0 14 0
+				GetMotorVelocity_Self(0, 20, 0); //åŸæ¥ 0 14 0
 				SetPWM('O', Velocity[0], Velocity[1], Velocity[2]);
 
 
 			}
 			else if (Radar.Angle< RADAR_MID - 5)
 			{
-				GetMotorVelocity_Self(-10, 0, 0);//Ô­À´-10 0 0
+				GetMotorVelocity_Self(-10, 0, 0);//åŸæ¥-10 0 0
 				SetPWM('O', Velocity[0], Velocity[1], Velocity[2]);
 
 
 			}
 			else if (Radar.Angle > RADAR_MID + 5)
 			{
-				GetMotorVelocity_Self(10, 0, 0);//Ô­À´10 0 0
+				GetMotorVelocity_Self(10, 0, 0);//åŸæ¥10 0 0
 				SetPWM('O', Velocity[0], Velocity[1], Velocity[2]);
 
 
@@ -1094,8 +1097,8 @@ void robot::FindBall_VandR(unsigned char ball)
 			else
 			{
 				SetPWM('S', 0, 0, 0);
-				SetPWM('Y', 0, 0, 0);	//·¢ËÍĞÅºÅ¸øµ¥Æ¬»ú£¬²ù×ÓÏÂ½µ Robot_armDown();
-				GetMotorVelocity_Self(0, 7, 0);//Ô­À´0 7 0 
+				SetPWM('Y', 0, 0, 0);	//å‘é€ä¿¡å·ç»™å•ç‰‡æœºï¼Œé“²å­ä¸‹é™ Robot_armDown();
+				GetMotorVelocity_Self(0, 7, 0);//åŸæ¥0 7 0 
 				SetPWM('O', Velocity[0], Velocity[1], Velocity[2]);
 
 
@@ -1107,14 +1110,14 @@ void robot::FindBall_VandR(unsigned char ball)
 	}
 
 
-	//»ñÈ¡ºìÍâ×´Ì¬ GetInfraredState();
+	//è·å–çº¢å¤–çŠ¶æ€ GetInfraredState();
 	while (1)
 	{
 		if (Infr)
 			break;
 	}	SetPWM('S', 0, 0, 0);
 
-	SetPWM('N', 0, 0, 0);	//²ùµ½Çò£¬Éı²ù Robot_armUp();
+	SetPWM('N', 0, 0, 0);	//é“²åˆ°çƒï¼Œå‡é“² Robot_armUp();
 
 
 }

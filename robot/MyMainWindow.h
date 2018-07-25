@@ -29,7 +29,7 @@ public:
 	~MyMainWindow(void);
 
 protected:
-	void timerEvent(QTimerEvent *event);    //¶¨Ê±Æ÷ÊÂ¼ş
+	void timerEvent(QTimerEvent *event);    //å®šæ—¶å™¨äº‹ä»¶
 	
 
 private slots:
@@ -60,20 +60,20 @@ signals:
 
 private:
 	Ui::MyMainWindowClass ui;
-	//µØÍ¼ÏÔÊ¾
+	//åœ°å›¾æ˜¾ç¤º
 	QPixmap *pixmap;            
 	QGraphicsScene *scene;
 	QGraphicsView *view;
 
 	//
 	robot *bRobot;
-	//´®¿Ú½ÓÊÕºÍÆäÏß³Ì
+	//ä¸²å£æ¥æ”¶å’Œå…¶çº¿ç¨‹
 	UartState currentUartState = UartState::OFF;
 	QSerialPort *currentSerialPort;
 	Receive *uartReceive;
 	QThread *receiveThread;
 
-	//À×´ï¼°Æä´®¿Ú
+	//é›·è¾¾åŠå…¶ä¸²å£
 	UartState radarUartState = UartState::OFF;
 	radar *robotRadar;
 	QThread *radarThread;
@@ -90,9 +90,8 @@ private:
 
 	void showRobotData();
 
-	void uartSendCommand(char cmd,int pwm1 = 0, int pwm2 = 0, int pwm3 = 0);
-
-	
+	//æ”¾å…¥robotä¸­
+	//void uartSendCommand(char cmd,int pwm1 = 0, int pwm2 = 0, int pwm3 = 0);
 
 };
 

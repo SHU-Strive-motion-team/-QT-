@@ -17,7 +17,6 @@ public:
 
 	void showUpdate(QList<QPoint> p);
 
-
 protected:
 	void paintEvent(QPaintEvent *event);    //绘制事件
 	void resizeEvent(QResizeEvent *event);  //大小重置事件
