@@ -66,17 +66,14 @@ void CRadar::paintEvent(QPaintEvent *event)
 	painter.drawPie(m_drawArea, m_pieRotate * 16, 90 * 16);
 
 	//×°ÊÎ-Ëæ»úµã
-	if (!m_points.isEmpty())
+	for (int i = 0; i < m_points.count(); ++i)
 	{
-		for (int i = 0; i < m_points.count(); ++i)
-		{
-			//int colorAlaph = m_pointsAlapha.at(i);
-			//painter.setPen(QPen(QColor(255, 255, 255, colorAlaph), 3));
-			painter.setPen(QPen(QColor(Qt::red), 3));
-			painter.drawPoint(m_points.at(i));
-		}
+		//int colorAlaph = m_pointsAlapha.at(i);
+		//painter.setPen(QPen(QColor(255, 255, 255, colorAlaph), 3));
+		painter.setPen(QPen(QColor(Qt::red), 3));
+		painter.drawPoint(m_points.at(i));
 	}
-	
+
 }
 
 void CRadar::resizeEvent(QResizeEvent *event)

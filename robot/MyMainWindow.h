@@ -43,6 +43,8 @@ private slots:
 
     void on_pushButton_ctrl_cfm_clicked();
 
+	//void Show();
+
 	void robotDataUpdate();
 
 	void stopThread();
@@ -75,7 +77,7 @@ private:
 	UartState radarUartState = UartState::OFF;
 	radar *robotRadar;
 	QThread *radarThread;
-
+	
 	int showTimerId;
 	
 	void uartInit(void);
@@ -89,4 +91,9 @@ private:
 	void showRobotData();
 
 	void uartSendCommand(char cmd,int pwm1 = 0, int pwm2 = 0, int pwm3 = 0);
+
+	
+
 };
+
+

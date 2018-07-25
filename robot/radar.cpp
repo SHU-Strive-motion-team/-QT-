@@ -11,7 +11,7 @@ void ctrlc(int)
 	ctrl_c_pressed = true;
 }
 
-const float PI = (float)3.14159265;
+//const float PI = (float)3.14159265;
 
 radar::radar( robot *r, CRadar *w)
 	: Robot(r),
@@ -167,12 +167,16 @@ void radar::getNearest()
 
 		if (rad < 5.23599f && rad>4.18879f)
 		{
-			//取最近点
-			if (min_dep > _scan_data[pos].dist)
+			if (_scan_data[pos].dist > 10)
 			{
-				min_dep = _scan_data[pos].dist;
-				min_ang = _scan_data[pos].angle;
+				//取最近点
+				if (min_dep > _scan_data[pos].dist)
+				{
+					min_dep = _scan_data[pos].dist;
+					min_ang = _scan_data[pos].angle;
+				}
 			}
+			
 			if (_scan_data[pos].dist < 1000)
 			{
 				int offsetX = 350 / 2 + cos(_scan_data[pos].angle*PI / 180.0)*_scan_data[pos].dist / 1000 * 350 / 2;

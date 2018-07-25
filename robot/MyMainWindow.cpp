@@ -6,6 +6,7 @@ MyMainWindow::MyMainWindow(QWidget *parent)
 	: QMainWindow(parent),
 	scene(new QGraphicsScene(this)),
 	view(new QGraphicsView(scene, this))
+//	bRobot(new robot(this))
 {
 	ui.setupUi(this);
 
@@ -13,9 +14,9 @@ MyMainWindow::MyMainWindow(QWidget *parent)
 	uartReceive = new Receive(currentSerialPort);
 	receiveThread = new QThread(this);
 	uartReceive->moveToThread(receiveThread);
-	
-	bRobot = new robot(this, currentSerialPort);
 
+	bRobot = new robot(this, currentSerialPort);
+	
 	robotRadar = new radar(bRobot, ui.widget_radar);
 	radarThread = new QThread(this);
 	robotRadar->moveToThread(radarThread);
@@ -296,7 +297,7 @@ void MyMainWindow::uartSendCommand(char cmd, int pwm1, int pwm2, int pwm3)
 	sendData[0] = '@';
 	sendData[1] = '^';
 	sendData[2] = cmd;
-	sendData[3] = (pwm1>>8) & 0xff;
+	sendData[3] = (pwm1 >> 8) & 0xff;
 	sendData[4] = pwm1 & 0xff;
 	sendData[5] = (pwm2 >> 8) & 0xff;
 	sendData[6] = pwm2 & 0xff;
@@ -306,7 +307,7 @@ void MyMainWindow::uartSendCommand(char cmd, int pwm1, int pwm2, int pwm3)
 	for (int i = 0; i < 9; i++)
 		sendData[9] += sendData[i];
 	qDebug() << int(sendData[9]) << endl;
-	currentSerialPort->write(sendData,10);
+	currentSerialPort->write(sendData, 10);
 }
 
 //打开or关闭串口
@@ -431,12 +432,25 @@ void MyMainWindow::on_pushButton_ctrl_cfm_clicked()
 
 }
 //显示机器信息
+/*
+void MyMainWindow::Show()
+{
+	if (uartReceive->Type == Receive::ENCODER)
+	{
+		ui.lineEdit_m1->setText(QString::number(uartReceive->getData().at(0)));
+		ui.lineEdit_m2->setText(QString::number(uartReceive->getData().at(1)));
+		ui.lineEdit_m3->setText(QString::number(uartReceive->getData().at(2)));
+	}
+
+}
+*/
+//显示机器信息
 void MyMainWindow::robotDataUpdate()
 {
 	if (uartReceive->Type == Receive::ENCODER)
 	{
-		
-		bRobot->v[0] = uartReceive->getData()[0];	
+
+		bRobot->v[0] = uartReceive->getData()[0];
 		bRobot->v[1] = uartReceive->getData()[1];
 		bRobot->v[2] = uartReceive->getData()[2];
 
@@ -446,7 +460,7 @@ void MyMainWindow::robotDataUpdate()
 	}
 	else if (uartReceive->Type == Receive::PWM)
 	{
-		for (int i = 0; i < 3; i++)		
+		for (int i = 0; i < 3; i++)
 			bRobot->v[i] = uartReceive->getData()[i];
 
 		/*ui.lineEdit_pwm1->setText(QString::number(bRobot->v[0]));
@@ -454,7 +468,7 @@ void MyMainWindow::robotDataUpdate()
 		ui.lineEdit_pwm3->setText(QString::number(bRobot->v[2]));*/
 	}
 	else if (uartReceive->Type == Receive::POSITION)
-	{		
+	{
 		bRobot->setPosion(uartReceive->getData()[0], uartReceive->getData()[1], uartReceive->getData()[2]);
 
 		/*ui.lineEdit_x->setText(QString::number(bRobot->X));
@@ -471,6 +485,7 @@ void MyMainWindow::robotDataUpdate()
 	}
 
 }
+
 //子线程停止
 void MyMainWindow::stopThread()
 {
