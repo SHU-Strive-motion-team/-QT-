@@ -1,7 +1,7 @@
 #include "robot.h"
 
-robot::robot(QObject *parent, QSerialPort* p)
-	: QObject(parent), sendSerialPort(p)
+robot::robot(QSerialPort* p)
+	:sendSerialPort(p)
 {
 
 }
@@ -67,5 +67,7 @@ void robot::sendCommand(char cmd, int pwm1, int pwm2, int pwm3)
 	qDebug() << int(sendData[9]) << endl;
 
 	sendSerialPort->write(sendData, 10);
+
+	//parent
 }
 

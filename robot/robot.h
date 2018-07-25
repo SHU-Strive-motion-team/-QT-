@@ -24,7 +24,7 @@ class robot : public QObject
 	Q_OBJECT
 
 public:
-	robot(QObject *parent, QSerialPort* p);
+	robot(QSerialPort* p);
 	~robot();
 
 	void setPosion(float _x, float _y, float _yaw);

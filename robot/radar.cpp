@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <qthread.h>
+#include <qmessagebox.h>
 //#pragma comment(lib,"rplidar_driver")
 
 #include <signal.h>
@@ -62,6 +63,8 @@ void radar::startScan(QString com)
 		exit(-2);*/
 
 		qDebug() << "insufficent memory, exit\n";
+		emit reportError("insufficent memory, exit");
+		//QMessageBox::critical()
 	}
 
 	// make connection...
@@ -69,7 +72,8 @@ void radar::startScan(QString com)
 	{
 		//fprintf(stderr, "Error, cannot bind to the specified serial port %s.\n"		, opt_com_path);
 		qDebug() << "Error, cannot bind to the specified serial port " << opt_com_path << endl;
-		
+		emit reportError("Error, cannot bind to the specified serial port "+ com);
+
 		RPlidarDriver::DisposeDriver(drv);
 		drv = RPlidarDriver::CreateDriver(RPlidarDriver::DRIVER_TYPE_SERIALPORT);
 		return;
@@ -136,10 +140,12 @@ bool radar::checkRPLIDARHealth(RPlidarDriver * drv)
 	{ // the macro IS_OK is the preperred way to judge whether the operation is succeed.
 		//printf("RPLidar health status : %d\n", healthinfo.status);
 		qDebug() << "RPLidar health status :" << healthinfo.status << endl;
+		//emit reportError("RPLidar health status :"  + healthinfo.status);
 		if (healthinfo.status == RPLIDAR_STATUS_ERROR) 
 		{
 			//fprintf(stderr, "Error, rplidar internal error detected. Please reboot the device to retry.\n");
 			qDebug() << "Error, rplidar internal error detected. Please reboot the device to retry.\n";
+			emit reportError("Error, rplidar internal error detected. Please reboot the device to retry.");
 			// enable the following code if you want rplidar to be reboot by software
 			// drv->reset();
 			return false;
@@ -152,6 +158,7 @@ bool radar::checkRPLIDARHealth(RPlidarDriver * drv)
 	{
 		//fprintf(stderr, "Error, cannot retrieve the lidar health code: %x\n", op_result);
 		qDebug() << "Error, cannot retrieve the lidar health code:" << op_result << endl;
+		emit reportError("Error, cannot retrieve the lidar health code: "+QString::number(op_result));
 		return false;
 	}
 }

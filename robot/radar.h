@@ -35,13 +35,19 @@ public:
 	~radar();
 
 	void setCom(QString com);
+	//Í£Ö¹À×´ï
 	void setStop(bool v);
+
+
+
+
 
 public slots:
 	void startScan(QString com);
 
 signals:
 	//void completeScan(QList<QPoint> point);
+	void reportError(QString _err);
 
 private:
 
