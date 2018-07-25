@@ -14,7 +14,7 @@ MyMainWindow::MyMainWindow(QWidget *parent)
 	receiveThread = new QThread(this);
 	uartReceive->moveToThread(receiveThread);
 	
-	bRobot = new robot(this, currentSerialPort);
+	bRobot = new robot(currentSerialPort);
 
 	robotRadar = new radar(bRobot, ui.widget_radar);
 	radarThread = new QThread(this);
@@ -31,6 +31,8 @@ MyMainWindow::MyMainWindow(QWidget *parent)
 	connect(uartReceive, &Receive::RecSuccess, this, &MyMainWindow::robotDataUpdate);
 	//雷达开始
 	connect(this, &MyMainWindow::startRadar, robotRadar, &radar::startScan);
+	//雷达报错
+	connect(robotRadar, &radar::reportError, this, [this](QString err) {QMessageBox::critical(this, tr("Error"), err); });
 	//雷达绘图
 	//connect(robotRadar, &radar::completeScan, ui.widget_radar, &CRadar::showUpdate);
 	//窗口关闭后停止线程
@@ -52,15 +54,17 @@ void MyMainWindow::timerEvent(QTimerEvent * event)
 	if (showTimerId == event->timerId())
 	{
 		showRobotData();
+		//uartSendCommand('r', bRobot->Radar.Angle, bRobot->Radar.Distance, 0);
 	}
 }
-
+//串口初始化
 void MyMainWindow::uartInit(void)
 {
 	currentUartState = UartState::OFF;
 	radarUartState = UartState::OFF;
 	/* 所有当前可用的串口 */
 	ui.comboBox_com->clear();
+	ui.comboBox_com_radar->clear();
 	foreach(auto const &info, QSerialPortInfo::availablePorts())
 	{
 		ui.comboBox_com->addItem(info.portName() + ": " + info.description());
@@ -290,24 +294,24 @@ void MyMainWindow::showRobotData()
 *	@(0x40) ^(0x5E)	cmd		H1		L2		H2		L2		H3		L3		sum
 * SUM = 0x40 + 0x5E + cmd + H1 + L1 + H2 + L2 + H3 + L3
 */
-void MyMainWindow::uartSendCommand(char cmd, int pwm1, int pwm2, int pwm3)
-{
-	char sendData[10];
-	sendData[0] = '@';
-	sendData[1] = '^';
-	sendData[2] = cmd;
-	sendData[3] = (pwm1>>8) & 0xff;
-	sendData[4] = pwm1 & 0xff;
-	sendData[5] = (pwm2 >> 8) & 0xff;
-	sendData[6] = pwm2 & 0xff;
-	sendData[7] = (pwm2 >> 8) & 0xff;
-	sendData[8] = pwm3 & 0xff;
-	sendData[9] = 0;
-	for (int i = 0; i < 9; i++)
-		sendData[9] += sendData[i];
-	qDebug() << int(sendData[9]) << endl;
-	currentSerialPort->write(sendData,10);
-}
+//void MyMainWindow::uartSendCommand(char cmd, int pwm1, int pwm2, int pwm3)
+//{
+//	char sendData[10];
+//	sendData[0] = '@';
+//	sendData[1] = '^';
+//	sendData[2] = cmd;
+//	sendData[3] = (pwm1>>8) & 0xff;
+//	sendData[4] = pwm1 & 0xff;
+//	sendData[5] = (pwm2 >> 8) & 0xff;
+//	sendData[6] = pwm2 & 0xff;
+//	sendData[7] = (pwm2 >> 8) & 0xff;
+//	sendData[8] = pwm3 & 0xff;
+//	sendData[9] = 0;
+//	for (int i = 0; i < 9; i++)
+//		sendData[9] += sendData[i];
+//	qDebug() << int(sendData[9]) << endl;
+//	currentSerialPort->write(sendData,10);
+//}
 
 //打开or关闭串口
 void MyMainWindow::on_pushButton_uart_sw_clicked()
@@ -318,11 +322,11 @@ void MyMainWindow::on_pushButton_uart_sw_clicked()
 		currentUartState = UartState::OFF;
 		ui.pushButton_uart_sw->setText(QString::fromUtf8(u8"打开串口"));
 
-		if (receiveThread->isRunning())
+		/*if (receiveThread->isRunning())
 		{
 			receiveThread->quit();
 			receiveThread->wait();
-		}
+		}*/
 
 		ui.comboBox_com->setEnabled(true);
 		ui.comboBox_baud->setEnabled(true);
@@ -407,6 +411,8 @@ void MyMainWindow::on_pushButton_ctrl_rst_clicked()
 
 		showMapInit();
 		//给下位机发重启命令
+
+		bRobot->sendCommand(0, 0, 0, 0);
 	}
 	
 }
@@ -415,6 +421,7 @@ void MyMainWindow::on_pushButton_ctrl_cfm_clicked()
 {
 	if (currentUartState == UartState::OFF)
 		QToolTip::showText(QCursor::pos(), u8"请先打开串口");
+		//QMessageBox::critical(this, tr("Error"), tr(u8"请先打开串口"));
 	else
 	{
 		if (ui.comboBox_place->currentText() == u8"左场地")
@@ -426,49 +433,76 @@ void MyMainWindow::on_pushButton_ctrl_cfm_clicked()
 		ui.comboBox_prg->setEnabled(false);
 		ui.comboBox_place->setEnabled(false);
 		//给下位机发送启动命令
-		uartSendCommand(4,100,2,3);
+		bRobot->sendCommand(4,100,2,3);
 	}
 
 }
 //显示机器信息
 void MyMainWindow::robotDataUpdate()
 {
-	if (uartReceive->Type == Receive::ENCODER)
+	switch (uartReceive->Type)
 	{
-		
-		bRobot->v[0] = uartReceive->getData()[0];	
+	case Receive::ENCODER:
+		bRobot->v[0] = uartReceive->getData()[0];
 		bRobot->v[1] = uartReceive->getData()[1];
 		bRobot->v[2] = uartReceive->getData()[2];
+		break;
 
-		/*ui.lineEdit_m1->setText(QString::number(bRobot->v[0]));
-		ui.lineEdit_m2->setText(QString::number(bRobot->v[1]));
-		ui.lineEdit_m3->setText(QString::number(bRobot->v[2]));*/
-	}
-	else if (uartReceive->Type == Receive::PWM)
-	{
-		for (int i = 0; i < 3; i++)		
-			bRobot->v[i] = uartReceive->getData()[i];
+	case Receive::PWM:
+		for (int i = 0; i < 3; i++)
+			bRobot->PWM[i] = uartReceive->getData()[i];
+		break;
 
-		/*ui.lineEdit_pwm1->setText(QString::number(bRobot->v[0]));
-		ui.lineEdit_pwm2->setText(QString::number(bRobot->v[1]));
-		ui.lineEdit_pwm3->setText(QString::number(bRobot->v[2]));*/
-	}
-	else if (uartReceive->Type == Receive::POSITION)
-	{		
-		bRobot->setPosion(uartReceive->getData()[0], uartReceive->getData()[1], uartReceive->getData()[2]);
+	case Receive::POSITION:
+		bRobot->setPosion((uartReceive->getData()[0] - 14000) / 1000.0, (uartReceive->getData()[1] - 14000) / 1000.0, uartReceive->getData()[2]);
+		break;
 
-		/*ui.lineEdit_x->setText(QString::number(bRobot->X));
-		ui.lineEdit_y->setText(QString::number(bRobot->Y));
-		ui.lineEdit_row->setText(QString::number(bRobot->ThetaD));*/
-	}
-	else if (uartReceive->Type == Receive::VELOCITY)
-	{
+	case Receive::VELOCITY:
 		bRobot->setRobotV(uartReceive->getData()[0], uartReceive->getData()[1], uartReceive->getData()[2]);
+		break;
 
-		/*ui.lineEdit_Vx->setText(QString::number(bRobot->Vx));
-		ui.lineEdit_Vy->setText(QString::number(bRobot->Vy));
-		ui.lineEdit_Vw->setText(QString::number(bRobot->W));*/
+	default:
+		break;
 	}
+	
+	
+	
+	//if (uartReceive->Type == Receive::ENCODER)
+	//{
+	//	
+	//	bRobot->v[0] = uartReceive->getData()[0];	
+	//	bRobot->v[1] = uartReceive->getData()[1];
+	//	bRobot->v[2] = uartReceive->getData()[2];
+
+	//	/*ui.lineEdit_m1->setText(QString::number(bRobot->v[0]));
+	//	ui.lineEdit_m2->setText(QString::number(bRobot->v[1]));
+	//	ui.lineEdit_m3->setText(QString::number(bRobot->v[2]));*/
+	//}
+	//else if (uartReceive->Type == Receive::PWM)
+	//{
+	//	for (int i = 0; i < 3; i++)		
+	//		bRobot->v[i] = uartReceive->getData()[i];
+
+	//	/*ui.lineEdit_pwm1->setText(QString::number(bRobot->v[0]));
+	//	ui.lineEdit_pwm2->setText(QString::number(bRobot->v[1]));
+	//	ui.lineEdit_pwm3->setText(QString::number(bRobot->v[2]));*/
+	//}
+	//else if (uartReceive->Type == Receive::POSITION)
+	//{		
+	//	bRobot->setPosion((uartReceive->getData()[0]-14000)/1000.0, (uartReceive->getData()[1] - 14000) / 1000.0, uartReceive->getData()[2]);
+
+	//	/*ui.lineEdit_x->setText(QString::number(bRobot->X));
+	//	ui.lineEdit_y->setText(QString::number(bRobot->Y));
+	//	ui.lineEdit_row->setText(QString::number(bRobot->ThetaD));*/
+	//}
+	//else if (uartReceive->Type == Receive::VELOCITY)
+	//{
+	//	bRobot->setRobotV(uartReceive->getData()[0], uartReceive->getData()[1], uartReceive->getData()[2]);
+
+	//	/*ui.lineEdit_Vx->setText(QString::number(bRobot->Vx));
+	//	ui.lineEdit_Vy->setText(QString::number(bRobot->Vy));
+	//	ui.lineEdit_Vw->setText(QString::number(bRobot->W));*/
+	//}
 
 }
 //子线程停止

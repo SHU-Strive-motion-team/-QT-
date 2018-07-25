@@ -88,5 +88,6 @@ private:
 
 	void showRobotData();
 
-	void uartSendCommand(char cmd,int pwm1 = 0, int pwm2 = 0, int pwm3 = 0);
+	//∑≈»Îrobot÷–
+	//void uartSendCommand(char cmd,int pwm1 = 0, int pwm2 = 0, int pwm3 = 0);
 };
