@@ -181,8 +181,8 @@ void radar::getNearest()
 				{
 					min_dep = _scan_data[pos].dist;
 					min_ang = _scan_data[pos].angle;
-				}	
-
+				}
+			}
 			if (_scan_data[pos].dist < 1000)
 			{
 				int offsetX = 350 / 2 + cos(_scan_data[pos].angle*PI / 180.0)*_scan_data[pos].dist / 1000 * 350 / 2;

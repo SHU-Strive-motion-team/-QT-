@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'radar.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.10.1)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.9.2)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,7 +12,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'radar.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.10.1. It"
+#error "This file was generated using the moc from 5.9.2. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -94,7 +94,7 @@ void radar::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
     }
 }
 
-QT_INIT_METAOBJECT const QMetaObject radar::staticMetaObject = {
+const QMetaObject radar::staticMetaObject = {
     { &QObject::staticMetaObject, qt_meta_stringdata_radar.data,
       qt_meta_data_radar,  qt_static_metacall, nullptr, nullptr}
 };

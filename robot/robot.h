@@ -87,16 +87,16 @@ public:
 	void GetMotorVelocity_Self(float vx, float vy, float w);	//给自身坐标系速度求得轮子的速度
 	void RobotRotate(float theta);		//自旋运动，根据误差角度，自动调节
 	void RobotGoTo(float X_I, float Y_I, float Theta_I);		//行至指定坐标
-	void RobotGoAvoidance(void);		//避障直行
+	void RobotGoAvoidance();		//避障直行
 
 
 
 
-	void FindBasketball(void);		//所找球为篮球
-	void FindVolleyball(void);		//所找球为排球
+	void FindBasketball();		//所找球为篮球
+	void FindVolleyball();		//所找球为排球
 
 	void FindBall_vision(unsigned char ball);		//视觉找球
-	void FindBall_radar(void);						//雷达找球
+	void FindBall_radar();						//雷达找球
 	void FindBall_VandR(unsigned char ball);					//视觉雷达找球结合
 
 	struct RADAR

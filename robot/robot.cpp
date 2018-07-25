@@ -30,7 +30,7 @@ void robot::setRadarData(float _angle, float dist)
 	Radar.Distance = dist;
 	Radar.State = true;
 
-//	uartSendCommand('r', Radar.Angle, Radar.Angle, 0);
+//	sendCommand('r', Radar.Angle, Radar.Angle, 0);
 }
 
 void robot::setVisionData(float _depth, float _x)
@@ -336,7 +336,7 @@ void robot::SetPWM(char cmd, float V1, float V2, float V3)
 	//ui.lineEdit_pwm3->setText(data3);
 
 	//通过串口发送PWM波给单片机
-	uartSendCommand(cmd, V1, V2, V3);
+	sendCommand(cmd, V1, V2, V3);
 
 }
 
@@ -496,13 +496,13 @@ void robot::RobotGoTo(float X_I, float Y_I, float Theta_I)
 	SetPWM('S', 0, 0, 0);
 
 	//延时
-	uartSendCommand('D', 1000, 0, 0);
+	sendCommand('D', 1000, 0, 0);
 	//delay_ms(1000);
 	RobotRotate(Theta_I);
 }
 
 //避障直行
-void robot::RobotGoAvoidance(void)
+void robot::RobotGoAvoidance()
 {
 	float D_Theta, Distance;
 	//	float StraightDistance=0;
@@ -510,21 +510,24 @@ void robot::RobotGoAvoidance(void)
 	D_Theta = Radar.Angle - RADAR_MID;
 	Distance = Radar.Distance*sin(D_Theta);
 
-	while ((Distance<35) || (Distance>(-35))) {
+	while ((Distance < 35) || (Distance > (-35))) 
+	{
 		D_Theta = Radar.Angle - 270;
 		Distance = Radar.Distance*sin(D_Theta);
 
-		if (Distance>0) {
+		if (Distance > 0) 
+		{
 			GetMotorVelocity_Self(6, 0, 0);
 			SetPWM('A', Velocity[0], Velocity[1], Velocity[2]);
 		}
-		else {
+		else 
+		{
 			GetMotorVelocity_Self(-6, 0, 0);
 			SetPWM('A', Velocity[0], Velocity[1], Velocity[2]);
 		}
 
 		//延时
-		uartSendCommand('D', 1000, 0, 0);
+		sendCommand('D', 1000, 0, 0);
 		//delay_ms(1000);
 	}
 
@@ -549,16 +552,17 @@ void robot::RobotGoAvoidance(void)
 
 //所找球为篮球
 //同时在界面上显示“篮球”
-void robot::FindBasketball(void)
+void robot::FindBasketball()
 {
 	//	ball = 1;
 	//	HAL_UART_Transmit(&huart1, &ball, 1, 1000);
 	//ui.comboBox_ball->addItem("篮球");
+
 }
 
 //所找球为排球
 //同时在界面上显示“排球”
-void robot::FindVolleyball(void)
+void robot::FindVolleyball()
 {
 	//	ball = 3;
 	//	HAL_UART_Transmit(&huart1, &ball, 1, 1000);
@@ -580,16 +584,16 @@ void robot::FindBall_vision(unsigned char ball)
 	{
 	case 1:
 		FindBasketball();
-		uartSendCommand('D', 100, 0, 0);	//延时	delay_ms(100);
+		sendCommand('D', 100, 0, 0);	//延时	delay_ms(100);
 		FindBasketball();
-		uartSendCommand('D', 100, 0, 0);	//延时	delay_ms(100);
+		sendCommand('D', 100, 0, 0);	//延时	delay_ms(100);
 		FindBasketball();
 		break;
 	case 3:
 		FindVolleyball();
-		uartSendCommand('D', 100, 0, 0);	//延时	delay_ms(100);
+		sendCommand('D', 100, 0, 0);	//延时	delay_ms(100);
 		FindVolleyball();
-		uartSendCommand('D', 100, 0, 0);	//延时	delay_ms(100);
+		sendCommand('D', 100, 0, 0);	//延时	delay_ms(100);
 		FindVolleyball();
 		break;
 	}
@@ -845,18 +849,18 @@ void robot::FindBall_VandR(unsigned char ball)
 	{
 	case 1:
 		FindBasketball();
-		uartSendCommand('D', 10000, 0, 0);	//延时	delay_ms(10000);
+		sendCommand('D', 10000, 0, 0);	//延时	delay_ms(10000);
 		FindBasketball();
-		uartSendCommand('D', 10000, 0, 0);	//延时	delay_ms(10000);
+		sendCommand('D', 10000, 0, 0);	//延时	delay_ms(10000);
 		FindBasketball();
 		break;
 	case 3:
 		FindVolleyball();
 
-		uartSendCommand('D', 10000, 0, 0);	//延时	delay_ms(10000);
+		sendCommand('D', 10000, 0, 0);	//延时	delay_ms(10000);
 
 		FindVolleyball();
-		uartSendCommand('D', 10000, 0, 0);	//延时	delay_ms(10000);
+		sendCommand('D', 10000, 0, 0);	//延时	delay_ms(10000);
 		FindVolleyball();
 
 		break;
