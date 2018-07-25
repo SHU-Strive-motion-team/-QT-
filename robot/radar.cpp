@@ -12,7 +12,7 @@ void ctrlc(int)
 	ctrl_c_pressed = true;
 }
 
-const float PI = (float)3.14159265;
+//const float PI = (float)3.14159265;
 
 radar::radar( robot *r, CRadar *w)
 	: Robot(r),
@@ -55,7 +55,7 @@ void radar::startScan(QString com)
 	opt_com_path = tem.c_str();
 
 	//opt_com_path = "\\\\.\\com5";
-	//qDebug() << u8"À×´ïÏß³Ì" << QThread::currentThread() << endl;
+	//qDebug() << u8"é›·è¾¾çº¿ç¨‹" << QThread::currentThread() << endl;
 
 	if (!drv) 
 	{
@@ -165,8 +165,8 @@ bool radar::checkRPLIDARHealth(RPlidarDriver * drv)
 
 void radar::getNearest()
 {
-	float min_dep = 5000, min_ang = 0;							//×î½üµã½Ç¶È¡¢¾àÀë£¨Êµ¼ÊÎ»ÖÃ£©
-	float dep_pre = 5000, ang_pre = 240;						//Ç°Ò»¸ö²ÉÑùµã½Ç¶È¡¢¾àÀë
+	float min_dep = 5000, min_ang = 0;							//æœ€è¿‘ç‚¹è§’åº¦ã€è·ç¦»ï¼ˆå®žé™…ä½ç½®ï¼‰
+	float dep_pre = 5000, ang_pre = 240;						//å‰ä¸€ä¸ªé‡‡æ ·ç‚¹è§’åº¦ã€è·ç¦»
 	m_points.clear();
 	for (int pos = 0; pos < (int)_scan_data.size(); ++pos)
 	{
@@ -176,13 +176,13 @@ void radar::getNearest()
 		{
 			if (_scan_data[pos].dist > 10)
 			{
-				//È¡×î½üµã
+				//å–æœ€è¿‘ç‚¹
 				if (min_dep > _scan_data[pos].dist)
 				{
 					min_dep = _scan_data[pos].dist;
 					min_ang = _scan_data[pos].angle;
-				}
-			}			
+				}	
+
 			if (_scan_data[pos].dist < 1000)
 			{
 				int offsetX = 350 / 2 + cos(_scan_data[pos].angle*PI / 180.0)*_scan_data[pos].dist / 1000 * 350 / 2;

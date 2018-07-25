@@ -70,4 +70,8 @@ private:
 
 	CRadar *radarWidget;
 
+	
+
+
+
 };

@@ -6,6 +6,7 @@ MyMainWindow::MyMainWindow(QWidget *parent)
 	: QMainWindow(parent),
 	scene(new QGraphicsScene(this)),
 	view(new QGraphicsView(scene, this))
+//	bRobot(new robot(this))
 {
 	ui.setupUi(this);
 
@@ -13,29 +14,31 @@ MyMainWindow::MyMainWindow(QWidget *parent)
 	uartReceive = new Receive(currentSerialPort);
 	receiveThread = new QThread(this);
 	uartReceive->moveToThread(receiveThread);
-	
+
 	bRobot = new robot(currentSerialPort);
 
+	bRobot = new robot(this, currentSerialPort);
+	
 	robotRadar = new radar(bRobot, ui.widget_radar);
 	radarThread = new QThread(this);
 	robotRadar->moveToThread(radarThread);
 	ui.widget_radar->moveToThread(radarThread);
 
-	//ÏÔÊ¾Êı¾İ
+	//æ˜¾ç¤ºæ•°æ®
 	showTimerId = startTimer(200);
 
 	showMapInit();
 	uartInit();
 	qDebug() << QThread::currentThread() << endl;
-	//´®¿Ú½ÓÊÕ³É¹¦ºóÏÔÊ¾ĞÅÏ¢
+	//ä¸²å£æ¥æ”¶æˆåŠŸåæ˜¾ç¤ºä¿¡æ¯
 	connect(uartReceive, &Receive::RecSuccess, this, &MyMainWindow::robotDataUpdate);
-	//À×´ï¿ªÊ¼
+	//é›·è¾¾å¼€å§‹
 	connect(this, &MyMainWindow::startRadar, robotRadar, &radar::startScan);
-	//À×´ï±¨´í
+	//é›·è¾¾æŠ¥é”™
 	connect(robotRadar, &radar::reportError, this, [this](QString err) {QMessageBox::critical(this, tr("Error"), err); });
-	//À×´ï»æÍ¼
+	//é›·è¾¾ç»˜å›¾
 	//connect(robotRadar, &radar::completeScan, ui.widget_radar, &CRadar::showUpdate);
-	//´°¿Ú¹Ø±ÕºóÍ£Ö¹Ïß³Ì
+	//çª—å£å…³é—­ååœæ­¢çº¿ç¨‹
 	connect(this, &QObject::destroyed, this, &MyMainWindow::stopThread);
 }
 
@@ -57,12 +60,12 @@ void MyMainWindow::timerEvent(QTimerEvent * event)
 		//uartSendCommand('r', bRobot->Radar.Angle, bRobot->Radar.Distance, 0);
 	}
 }
-//´®¿Ú³õÊ¼»¯
+//ä¸²å£åˆå§‹åŒ–
 void MyMainWindow::uartInit(void)
 {
 	currentUartState = UartState::OFF;
 	radarUartState = UartState::OFF;
-	/* ËùÓĞµ±Ç°¿ÉÓÃµÄ´®¿Ú */
+	/* æ‰€æœ‰å½“å‰å¯ç”¨çš„ä¸²å£ */
 	ui.comboBox_com->clear();
 	ui.comboBox_com_radar->clear();
 	foreach(auto const &info, QSerialPortInfo::availablePorts())
@@ -80,14 +83,14 @@ void MyMainWindow::uartInit(void)
 
 void MyMainWindow::showMapInit()
 {
-	//Ä¬ÈÏ×óÉÏ½Ç
+	//é»˜è®¤å·¦ä¸Šè§’
 	view->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 	view->setFixedSize(725, 550);
-	//ÔÚÖ÷½çÃæÌí¼Óview
+	//åœ¨ä¸»ç•Œé¢æ·»åŠ view
 	ui.horizontalLayout_11->addWidget(view);
-	//ÉèÖÃscene´óĞ¡
+	//è®¾ç½®sceneå¤§å°
 	scene->setSceneRect(0, 0, 720, 545);
-	//ÉèÖÃview±³¾°
+	//è®¾ç½®viewèƒŒæ™¯
 	pixmap = new QPixmap(720, 545);
 	QPainter p(pixmap);
 	p.setBrush(QBrush(Qt::gray));
@@ -97,23 +100,23 @@ void MyMainWindow::showMapInit()
 
 void MyMainWindow::showMapLeft()
 {
-	//Çå³ıÏÖÓĞpixmap
+	//æ¸…é™¤ç°æœ‰pixmap
 	QPixmap *pPixmap;
 	pPixmap = pixmap;
 	pixmap = new QPixmap(720, 545);
 	pPixmap->~QPixmap();
 
 	QPainter painter(pixmap);
-	//ÉèÖÃ±³¾°É«
+	//è®¾ç½®èƒŒæ™¯è‰²
 	painter.setPen(Qt::gray);
 	painter.setBrush(Qt::gray);
 	painter.drawRect(0, 0, 720, 545);
 
-	//ÉèÖÃÏßÌõÑÕÉ«
+	//è®¾ç½®çº¿æ¡é¢œè‰²
 	painter.setPen(Qt::black);
 	painter.setBrush(Qt::transparent);
 
-	//»æÖÆÇò³¡±ß½ç
+	//ç»˜åˆ¶çƒåœºè¾¹ç•Œ
 	QPainterPath groundPath;
 	groundPath.moveTo(710, 110);
 	groundPath.lineTo(10, 110);
@@ -129,7 +132,7 @@ void MyMainWindow::showMapLeft()
 	groundPath.lineTo(10, 10);
 	painter.drawPath(groundPath);
 
-	//ÖĞÈ¦Ïß
+	//ä¸­åœˆçº¿
 	QPainterPath centerPath;
 	centerPath.moveTo(620, 110);
 	centerPath.arcTo(620, 20, 180, 180, 180, 90);
@@ -139,32 +142,32 @@ void MyMainWindow::showMapLeft()
 	centerPath.arcTo(540, -60, 340, 340, 180, 90);
 	painter.drawPath(centerPath);
 
-	//Èı·ÖÏß
+	//ä¸‰åˆ†çº¿
 	QPainterPath threePath;
 	threePath.moveTo(10, 437.5);
 	threePath.lineTo(173.1, 437.5);
 	threePath.arcTo(-248.75, -227.5, 675, 675, 284, 166);
 	painter.drawPath(threePath);
 
-	//·£ÇòÏß
+	//ç½šçƒçº¿
 	QPainterPath freeThrowPath;
 	freeThrowPath.moveTo(210, 110);
 	freeThrowPath.arcTo(210, 20, 180, 180, 180, 360);
 	painter.drawPath(freeThrowPath);
 
-	//Í¶Àº±ßÏß
+	//æŠ•ç¯®è¾¹çº¿
 	QPainterPath basketLinePath;
 	basketLinePath.moveTo(10, 171.64);
 	basketLinePath.arcTo(-11.25, 10, 200, 200, 218, 284);
 	painter.drawPath(basketLinePath);
 
-	//µ×ÏßÖÃÇòÎ»
+	//åº•çº¿ç½®çƒä½
 	QPainterPath endBallPath;
 	endBallPath.moveTo(97.5, 460);
 	endBallPath.lineTo(60, 460);
 	painter.drawPath(endBallPath);
 
-	//Àº¿ğ
+	//ç¯®ç­
 	QPainterPath basketPath;
 	basketPath.moveTo(88.75, 85);
 	basketPath.lineTo(88.75, 135);
@@ -177,23 +180,23 @@ void MyMainWindow::showMapLeft()
 
 void MyMainWindow::showMapRight()
 {
-	//Çå³ıÏÖÓĞpixmap
+	//æ¸…é™¤ç°æœ‰pixmap
 	QPixmap *pPixmap;
 	pPixmap = pixmap;
 	pixmap = new QPixmap(720, 545);
 	pPixmap->~QPixmap();
 
 	QPainter painter(pixmap);
-	//ÉèÖÃ±³¾°É«
+	//è®¾ç½®èƒŒæ™¯è‰²
 	painter.setPen(Qt::gray);
 	painter.setBrush(Qt::gray);
 	painter.drawRect(0, 0, 720, 545);
 
-	//ÉèÖÃÏßÌõÑÕÉ«
+	//è®¾ç½®çº¿æ¡é¢œè‰²
 	painter.setPen(Qt::black);
 	painter.setBrush(Qt::transparent);
 
-	//»æÖÆÇò³¡±ß½ç
+	//ç»˜åˆ¶çƒåœºè¾¹ç•Œ
 	QPainterPath groundPath;
 	groundPath.moveTo(10, 110);
 	groundPath.lineTo(710, 110);
@@ -223,38 +226,38 @@ void MyMainWindow::showMapRight()
 	
 	painter.drawPath(groundPath);
 
-	//ÖĞÈ¦Ïß
+	//ä¸­åœˆçº¿
 	QPainterPath centerPath;
 	centerPath.moveTo(235, 147.5);
 	centerPath.arcTo(10, 147.5, 250, 250, 0, 360);
 	painter.drawPath(centerPath);
 
-	//Èı·ÖÏß
+	//ä¸‰åˆ†çº¿
 	QPainterPath threePath;
 	threePath.moveTo(631.25, -227.5);
 	threePath.arcTo(293.75, -227.5, 675, 675, 90, 166);
 	threePath.lineTo(710, 437.5);
 	painter.drawPath(threePath);
 
-	//·£ÇòÏß
+	//ç½šçƒçº¿
 	QPainterPath freeThrowPath;
 	freeThrowPath.moveTo(330, 110);
 	freeThrowPath.arcTo(330, 20, 180, 180, 180, 360);
 	painter.drawPath(freeThrowPath);
 
-	//Í¶Àº±ßÏß
+	//æŠ•ç¯®è¾¹çº¿
 	QPainterPath basketLinePath;
 	basketLinePath.moveTo(710, 48.36);
 	basketLinePath.arcTo(531.25, 10, 200, 200, 38, 284);
 	painter.drawPath(basketLinePath);
 
-	//µ×ÏßÖÃÇòÎ»
+	//åº•çº¿ç½®çƒä½
 	QPainterPath endBallPath;
 	endBallPath.moveTo(622.5, 460);
 	endBallPath.lineTo(660, 460);
 	painter.drawPath(endBallPath);
 
-	//Àº¿ğ
+	//ç¯®ç­
 	QPainterPath basketPath;
 	basketPath.moveTo(631.25, 85);
 	basketPath.lineTo(631.25, 135);
@@ -289,8 +292,8 @@ void MyMainWindow::showRobotData()
 }
 
 
-/*ÉÏÎ»»ú¸øÏÂÎ»»ú·¢ËÍĞ­Òé£¨Êı¾İÎªÈı¸öÂÖ×ÓPWM£©
-*	¿ªÊ¼1	¿ªÊ¼2	¿ØÖÆ×Ö	Êı¾İ1	Êı¾İ1	Êı¾İ2	Êı¾İ2	Êı¾İ3	Êı¾İ3	Ğ£ÑéºÍ
+/*ä¸Šä½æœºç»™ä¸‹ä½æœºå‘é€åè®®ï¼ˆæ•°æ®ä¸ºä¸‰ä¸ªè½®å­PWMï¼‰
+*	å¼€å§‹1	å¼€å§‹2	æ§åˆ¶å­—	æ•°æ®1	æ•°æ®1	æ•°æ®2	æ•°æ®2	æ•°æ®3	æ•°æ®3	æ ¡éªŒå’Œ
 *	@(0x40) ^(0x5E)	cmd		H1		L2		H2		L2		H3		L3		sum
 * SUM = 0x40 + 0x5E + cmd + H1 + L1 + H2 + L2 + H3 + L3
 */
@@ -313,14 +316,14 @@ void MyMainWindow::showRobotData()
 //	currentSerialPort->write(sendData,10);
 //}
 
-//´ò¿ªor¹Ø±Õ´®¿Ú
+//æ‰“å¼€orå…³é—­ä¸²å£
 void MyMainWindow::on_pushButton_uart_sw_clicked()
 {
 	if (currentUartState == UartState::ON) 
 	{
 		currentSerialPort->close();
 		currentUartState = UartState::OFF;
-		ui.pushButton_uart_sw->setText(QString::fromUtf8(u8"´ò¿ª´®¿Ú"));
+		ui.pushButton_uart_sw->setText(QString::fromUtf8(u8"æ‰“å¼€ä¸²å£"));
 
 		/*if (receiveThread->isRunning())
 		{
@@ -335,21 +338,21 @@ void MyMainWindow::on_pushButton_uart_sw_clicked()
 	{
 		currentSerialPort->setPortName(ui.comboBox_com->currentText().split(':').at(0));
 		currentSerialPort->setBaudRate(ui.comboBox_baud->currentText().toInt());
-		//Ä¬ÈÏ²ÎÊıÉèÖÃ
-		currentSerialPort->setFlowControl(QSerialPort::NoFlowControl);// ÎŞÁ÷¿ØÖÆ
-		currentSerialPort->setDataBits(QSerialPort::Data8);//Êı¾İÎª 8
-		currentSerialPort->setStopBits(QSerialPort::OneStop);//Í£Ö¹Î»Ò»Î»
-		currentSerialPort->setParity(QSerialPort::NoParity);//ÎŞĞ£ÑéÎ»
-		currentSerialPort->setReadBufferSize(10); //½ÓÊÕ»º´æ10¸ö×Ö½Ú
+		//é»˜è®¤å‚æ•°è®¾ç½®
+		currentSerialPort->setFlowControl(QSerialPort::NoFlowControl);// æ— æµæ§åˆ¶
+		currentSerialPort->setDataBits(QSerialPort::Data8);//æ•°æ®ä¸º 8
+		currentSerialPort->setStopBits(QSerialPort::OneStop);//åœæ­¢ä½ä¸€ä½
+		currentSerialPort->setParity(QSerialPort::NoParity);//æ— æ ¡éªŒä½
+		currentSerialPort->setReadBufferSize(10); //æ¥æ”¶ç¼“å­˜10ä¸ªå­—èŠ‚
 
 		if (currentSerialPort->open(QSerialPort::ReadWrite)) 
 		{
 			currentUartState = UartState::ON;
-			//½ÓÊÕÏß³Ì¿ªÊ¼
+			//æ¥æ”¶çº¿ç¨‹å¼€å§‹
 			receiveThread->start();
-			//Á¬½Ó²ÛĞÅºÅ ½ÓÊÕ
+			//è¿æ¥æ§½ä¿¡å· æ¥æ”¶
 			connect(currentSerialPort, &QSerialPort::readyRead, uartReceive, &Receive::ReceiveUartData);
-			ui.pushButton_uart_sw->setText(u8"¹Ø±Õ´®¿Ú");
+			ui.pushButton_uart_sw->setText(u8"å…³é—­ä¸²å£");
 			ui.comboBox_com->setEnabled(false);
 			ui.comboBox_baud->setEnabled(false);
 		}
@@ -358,7 +361,7 @@ void MyMainWindow::on_pushButton_uart_sw_clicked()
 		}
 	}
 }
-//´®¿ÚĞÅÏ¢Ë¢ĞÂ
+//ä¸²å£ä¿¡æ¯åˆ·æ–°
 void MyMainWindow::on_pushButton_uart_rfresh_clicked()
 {
 	if (currentUartState == UartState::ON ||radarUartState == UartState::ON)
@@ -366,16 +369,16 @@ void MyMainWindow::on_pushButton_uart_rfresh_clicked()
 	else
 		uartInit();
 }
-//´®¿ÚcomboxĞü¸¡ĞÅÏ¢¸Ä±ä
+//ä¸²å£comboxæ‚¬æµ®ä¿¡æ¯æ”¹å˜
 void MyMainWindow::on_comboBox_com_currentTextChanged(const QString &arg1)
 {
 	ui.comboBox_com->setToolTip(ui.comboBox_com->currentText());
 }
-//¿ØÖÆ¸´Î»
+//æ§åˆ¶å¤ä½
 void MyMainWindow::on_pushButton_ctrl_rst_clicked()
 {
 	if (currentUartState == UartState::OFF)
-		QToolTip::showText(QCursor::pos(), u8"ÇëÏÈ´ò¿ª´®¿Ú");
+		QToolTip::showText(QCursor::pos(), u8"è¯·å…ˆæ‰“å¼€ä¸²å£");
 	else
 	{
 		ui.comboBox_ball->setEnabled(true);
@@ -410,38 +413,52 @@ void MyMainWindow::on_pushButton_ctrl_rst_clicked()
 		);
 
 		showMapInit();
-		//¸øÏÂÎ»»ú·¢ÖØÆôÃüÁî
+		//ç»™ä¸‹ä½æœºå‘é‡å¯å‘½ä»¤
 
 		bRobot->sendCommand(0, 0, 0, 0);
 	}
 	
 }
-//¿ØÖÆÈ·ÈÏ²Ûº¯Êı
+//æ§åˆ¶ç¡®è®¤æ§½å‡½æ•°
 void MyMainWindow::on_pushButton_ctrl_cfm_clicked()
 {
 	if (currentUartState == UartState::OFF)
-		QToolTip::showText(QCursor::pos(), u8"ÇëÏÈ´ò¿ª´®¿Ú");
-		//QMessageBox::critical(this, tr("Error"), tr(u8"ÇëÏÈ´ò¿ª´®¿Ú"));
+		QToolTip::showText(QCursor::pos(), u8"è¯·å…ˆæ‰“å¼€ä¸²å£");
+		//QMessageBox::critical(this, tr("Error"), tr(u8"è¯·å…ˆæ‰“å¼€ä¸²å£"));
 	else
 	{
-		if (ui.comboBox_place->currentText() == u8"×ó³¡µØ")
+		if (ui.comboBox_place->currentText() == u8"å·¦åœºåœ°")
 			showMapLeft();
-		else if (ui.comboBox_place->currentText() == u8"ÓÒ³¡µØ")
+		else if (ui.comboBox_place->currentText() == u8"å³åœºåœ°")
 			showMapRight();
 
 		ui.comboBox_ball->setEnabled(false);
 		ui.comboBox_prg->setEnabled(false);
 		ui.comboBox_place->setEnabled(false);
-		//¸øÏÂÎ»»ú·¢ËÍÆô¶¯ÃüÁî
+		//ç»™ä¸‹ä½æœºå‘é€å¯åŠ¨å‘½ä»¤
 		bRobot->sendCommand(4,100,2,3);
 	}
 
 }
-//ÏÔÊ¾»úÆ÷ĞÅÏ¢
+//æ˜¾ç¤ºæœºå™¨ä¿¡æ¯
+/*
+void MyMainWindow::Show()
+{
+	if (uartReceive->Type == Receive::ENCODER)
+	{
+		ui.lineEdit_m1->setText(QString::number(uartReceive->getData().at(0)));
+		ui.lineEdit_m2->setText(QString::number(uartReceive->getData().at(1)));
+		ui.lineEdit_m3->setText(QString::number(uartReceive->getData().at(2)));
+	}
+
+}
+*/
+//æ˜¾ç¤ºæœºå™¨ä¿¡æ¯
 void MyMainWindow::robotDataUpdate()
 {
 	switch (uartReceive->Type)
 	{
+
 	case Receive::ENCODER:
 		bRobot->v[0] = uartReceive->getData()[0];
 		bRobot->v[1] = uartReceive->getData()[1];
@@ -456,7 +473,6 @@ void MyMainWindow::robotDataUpdate()
 	case Receive::POSITION:
 		bRobot->setPosion((uartReceive->getData()[0] - 14000) / 1000.0, (uartReceive->getData()[1] - 14000) / 1000.0, uartReceive->getData()[2]);
 		break;
-
 	case Receive::VELOCITY:
 		bRobot->setRobotV(uartReceive->getData()[0], uartReceive->getData()[1], uartReceive->getData()[2]);
 		break;
@@ -505,7 +521,8 @@ void MyMainWindow::robotDataUpdate()
 	//}
 
 }
-//×ÓÏß³ÌÍ£Ö¹
+
+//å­çº¿ç¨‹åœæ­¢
 void MyMainWindow::stopThread()
 {
 	if (receiveThread->isRunning())
@@ -528,16 +545,16 @@ void MyMainWindow::on_pushButton_uart_rfresh_r_clicked()
 	else
 		uartInit();	
 }
-//À×´ïÆô¶¯or¹Ø±Õ
+//é›·è¾¾å¯åŠ¨orå…³é—­
 void MyMainWindow::on_pushButton_uart_sw_r_clicked()
 {
 	if (radarUartState == UartState::ON)
 	{
 		radarUartState = UartState::OFF;
-		ui.pushButton_uart_sw_r->setText(QString::fromUtf8(u8"¿ªÊ¼"));
+		ui.pushButton_uart_sw_r->setText(QString::fromUtf8(u8"å¼€å§‹"));
 
 		ui.comboBox_com_radar->setEnabled(true);
-		//¹Ø±ÕÏß³Ì
+		//å…³é—­çº¿ç¨‹
 		if (radarThread->isRunning())
 		{
 			robotRadar->setStop(true);
@@ -551,14 +568,14 @@ void MyMainWindow::on_pushButton_uart_sw_r_clicked()
 		radarUartState = UartState::ON;
 
 		//robotRadar->startScan(ui.comboBox_com_radar->currentText().split(':').at(0));	
-		//½ÓÊÕÏß³Ì¿ªÊ¼
+		//æ¥æ”¶çº¿ç¨‹å¼€å§‹
 		radarThread->start();
 		robotRadar->setStop(false);
 		emit startRadar(ui.comboBox_com_radar->currentText().split(':').at(0));
 		
 		//robotRadar->setCom()
 
-		ui.pushButton_uart_sw_r->setText(u8"Í£Ö¹");
+		ui.pushButton_uart_sw_r->setText(u8"åœæ­¢");
 		ui.comboBox_com_radar->setEnabled(false);
 
 	}
