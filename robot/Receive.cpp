@@ -7,6 +7,7 @@ Receive::Receive(QSerialPort* p):receiveSerialPort(p)
 Receive::~Receive()
 {
 	receiveSerialPort->deleteLater();
+	originalData.clear();
 	delete Data;
 }
 

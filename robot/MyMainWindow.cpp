@@ -322,11 +322,11 @@ void MyMainWindow::on_pushButton_uart_sw_clicked()
 		currentUartState = UartState::OFF;
 		ui.pushButton_uart_sw->setText(QString::fromUtf8(u8"´ò¿ª´®¿Ú"));
 
-		if (receiveThread->isRunning())
+		/*if (receiveThread->isRunning())
 		{
 			receiveThread->quit();
 			receiveThread->wait();
-		}
+		}*/
 
 		ui.comboBox_com->setEnabled(true);
 		ui.comboBox_baud->setEnabled(true);
@@ -446,17 +446,21 @@ void MyMainWindow::robotDataUpdate()
 		bRobot->v[0] = uartReceive->getData()[0];
 		bRobot->v[1] = uartReceive->getData()[1];
 		bRobot->v[2] = uartReceive->getData()[2];
+		break;
 
 	case Receive::PWM:
 		for (int i = 0; i < 3; i++)
-			bRobot->v[i] = uartReceive->getData()[i];
+			bRobot->PWM[i] = uartReceive->getData()[i];
+		break;
 
 	case Receive::POSITION:
 		bRobot->setPosion((uartReceive->getData()[0] - 14000) / 1000.0, (uartReceive->getData()[1] - 14000) / 1000.0, uartReceive->getData()[2]);
-	
+		break;
+
 	case Receive::VELOCITY:
 		bRobot->setRobotV(uartReceive->getData()[0], uartReceive->getData()[1], uartReceive->getData()[2]);
-	
+		break;
+
 	default:
 		break;
 	}
