@@ -192,7 +192,8 @@ void radar::getNearest()
 		}	
 	}
 	Robot->setRadarData(min_ang, min_dep);
-	Robot->sendCommand('r', min_ang, min_dep, 0);
+	//Robot->sendCommand('r', min_ang, min_dep, 0);
+	emit sendNearestPoint('r', min_ang, min_dep, 0);
 	radarWidget->showUpdate(m_points);
 
 	//emit completeScan(m_points);

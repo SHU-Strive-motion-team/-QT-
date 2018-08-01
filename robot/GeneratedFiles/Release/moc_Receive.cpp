@@ -1,16 +1,16 @@
 /****************************************************************************
-** Meta object code from reading C++ file 'robot.h'
+** Meta object code from reading C++ file 'Receive.h'
 **
 ** Created by: The Qt Meta Object Compiler version 67 (Qt 5.9.2)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "../../robot.h"
+#include "../../Receive.h"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
-#error "The header file 'robot.h' doesn't include <QObject>."
+#error "The header file 'Receive.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
 #error "This file was generated using the moc from 5.9.2. It"
 #error "cannot be used with the include files from this version of Qt."
@@ -20,31 +20,27 @@
 QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
-struct qt_meta_stringdata_robot_t {
-    QByteArrayData data[7];
-    char stringdata0[32];
+struct qt_meta_stringdata_Receive_t {
+    QByteArrayData data[3];
+    char stringdata0[20];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_robot_t, stringdata0) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_Receive_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
-static const qt_meta_stringdata_robot_t qt_meta_stringdata_robot = {
+static const qt_meta_stringdata_Receive_t qt_meta_stringdata_Receive = {
     {
-QT_MOC_LITERAL(0, 0, 5), // "robot"
-QT_MOC_LITERAL(1, 6, 11), // "sendCommend"
-QT_MOC_LITERAL(2, 18, 0), // ""
-QT_MOC_LITERAL(3, 19, 3), // "cmd"
-QT_MOC_LITERAL(4, 23, 2), // "d1"
-QT_MOC_LITERAL(5, 26, 2), // "d2"
-QT_MOC_LITERAL(6, 29, 2) // "d3"
+QT_MOC_LITERAL(0, 0, 7), // "Receive"
+QT_MOC_LITERAL(1, 8, 10), // "RecSuccess"
+QT_MOC_LITERAL(2, 19, 0) // ""
 
     },
-    "robot\0sendCommend\0\0cmd\0d1\0d2\0d3"
+    "Receive\0RecSuccess\0"
 };
 #undef QT_MOC_LITERAL
 
-static const uint qt_meta_data_robot[] = {
+static const uint qt_meta_data_Receive[] = {
 
  // content:
        7,       // revision
@@ -58,56 +54,57 @@ static const uint qt_meta_data_robot[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    4,   19,    2, 0x06 /* Public */,
+       1,    0,   19,    2, 0x06 /* Public */,
 
  // signals: parameters
-    QMetaType::Void, QMetaType::Char, QMetaType::Int, QMetaType::Int, QMetaType::Int,    3,    4,    5,    6,
+    QMetaType::Void,
 
        0        // eod
 };
 
-void robot::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void Receive::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
-        robot *_t = static_cast<robot *>(_o);
+        Receive *_t = static_cast<Receive *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->sendCommend((*reinterpret_cast< char(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4]))); break;
+        case 0: _t->RecSuccess(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         void **func = reinterpret_cast<void **>(_a[1]);
         {
-            typedef void (robot::*_t)(char , int , int , int );
-            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&robot::sendCommend)) {
+            typedef void (Receive::*_t)();
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&Receive::RecSuccess)) {
                 *result = 0;
                 return;
             }
         }
     }
+    Q_UNUSED(_a);
 }
 
-const QMetaObject robot::staticMetaObject = {
-    { &QObject::staticMetaObject, qt_meta_stringdata_robot.data,
-      qt_meta_data_robot,  qt_static_metacall, nullptr, nullptr}
+const QMetaObject Receive::staticMetaObject = {
+    { &QObject::staticMetaObject, qt_meta_stringdata_Receive.data,
+      qt_meta_data_Receive,  qt_static_metacall, nullptr, nullptr}
 };
 
 
-const QMetaObject *robot::metaObject() const
+const QMetaObject *Receive::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *robot::qt_metacast(const char *_clname)
+void *Receive::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_robot.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_Receive.stringdata0))
         return static_cast<void*>(this);
     return QObject::qt_metacast(_clname);
 }
 
-int robot::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int Receive::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QObject::qt_metacall(_c, _id, _a);
     if (_id < 0)
@@ -125,10 +122,9 @@ int robot::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void robot::sendCommend(char _t1, int _t2, int _t3, int _t4)
+void Receive::RecSuccess()
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)), const_cast<void*>(reinterpret_cast<const void*>(&_t3)), const_cast<void*>(reinterpret_cast<const void*>(&_t4)) };
-    QMetaObject::activate(this, &staticMetaObject, 0, _a);
+    QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

@@ -65,6 +65,8 @@ private:
 
 	//
 	robot *bRobot;
+	QThread *robotThread;
+
 	//串口接收和其线程
 	UartState currentUartState = UartState::OFF;
 	QSerialPort *currentSerialPort;
@@ -80,14 +82,7 @@ private:
 	
 	void uartInit(void);
 
-	void showMapInit();
-
-	void showMapLeft();
-
-	void showMapRight();
-
 	void showRobotData();
 
-	//放入robot中
-	//void uartSendCommand(char cmd,int pwm1 = 0, int pwm2 = 0, int pwm3 = 0);
+	void uartSendCommand(char cmd,int pwm1 = 0, int pwm2 = 0, int pwm3 = 0);
 };

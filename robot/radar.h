@@ -48,6 +48,7 @@ public slots:
 signals:
 	//void completeScan(QList<QPoint> point);
 	void reportError(QString _err);
+	void sendNearestPoint(char cmd, int d1, int d2, int d3);
 
 private:
 

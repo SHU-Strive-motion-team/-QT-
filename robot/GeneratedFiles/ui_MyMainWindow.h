@@ -29,6 +29,7 @@
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "cradar.h"
+#include "scene.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -110,8 +111,6 @@ public:
     QLineEdit *lineEdit_m3;
     QFrame *line_6;
     QFrame *line_3;
-    QWidget *horizontalLayoutWidget;
-    QHBoxLayout *horizontalLayout_11;
     QWidget *layoutWidget1;
     QVBoxLayout *verticalLayout_4;
     QLabel *label_29;
@@ -129,6 +128,7 @@ public:
     QLabel *label_34;
     QLineEdit *lineEdit_radar_d;
     CRadar *widget_radar;
+    scene *playingGround;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -137,7 +137,7 @@ public:
     {
         if (MyMainWindowClass->objectName().isEmpty())
             MyMainWindowClass->setObjectName(QStringLiteral("MyMainWindowClass"));
-        MyMainWindowClass->resize(1241, 661);
+        MyMainWindowClass->resize(1602, 742);
         centralWidget = new QWidget(MyMainWindowClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         layoutWidget = new QWidget(centralWidget);
@@ -181,6 +181,7 @@ public:
 
         label_26 = new QLabel(layoutWidget);
         label_26->setObjectName(QStringLiteral("label_26"));
+        label_26->setMaximumSize(QSize(90, 16777215));
 
         gridLayout->addWidget(label_26, 1, 0, 1, 1);
 
@@ -544,18 +545,9 @@ public:
 
         horizontalLayout_9->addWidget(line_3);
 
-        horizontalLayoutWidget = new QWidget(centralWidget);
-        horizontalLayoutWidget->setObjectName(QStringLiteral("horizontalLayoutWidget"));
-        horizontalLayoutWidget->setGeometry(QRect(870, 90, 261, 181));
-        horizontalLayout_11 = new QHBoxLayout(horizontalLayoutWidget);
-        horizontalLayout_11->setSpacing(6);
-        horizontalLayout_11->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_11->setObjectName(QStringLiteral("horizontalLayout_11"));
-        horizontalLayout_11->setSizeConstraint(QLayout::SetFixedSize);
-        horizontalLayout_11->setContentsMargins(0, 0, 0, 0);
         layoutWidget1 = new QWidget(centralWidget);
         layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(20, 14, 352, 495));
+        layoutWidget1->setGeometry(QRect(20, 14, 352, 499));
         verticalLayout_4 = new QVBoxLayout(layoutWidget1);
         verticalLayout_4->setSpacing(6);
         verticalLayout_4->setContentsMargins(11, 11, 11, 11);
@@ -586,6 +578,7 @@ public:
         label_30 = new QLabel(layoutWidget1);
         label_30->setObjectName(QStringLiteral("label_30"));
         label_30->setMinimumSize(QSize(0, 25));
+        label_30->setMaximumSize(QSize(90, 16777215));
 
         gridLayout_2->addWidget(label_30, 1, 0, 1, 1);
 
@@ -646,10 +639,15 @@ public:
 
         verticalLayout_4->addWidget(widget_radar);
 
+        playingGround = new scene(centralWidget);
+        playingGround->setObjectName(QStringLiteral("playingGround"));
+        playingGround->setGeometry(QRect(830, 10, 725, 545));
+        playingGround->setMinimumSize(QSize(725, 545));
+        playingGround->setMaximumSize(QSize(725, 545));
         MyMainWindowClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MyMainWindowClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1241, 22));
+        menuBar->setGeometry(QRect(0, 0, 1602, 26));
         MyMainWindowClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MyMainWindowClass);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));

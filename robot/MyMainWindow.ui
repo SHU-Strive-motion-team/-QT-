@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1241</width>
-    <height>661</height>
+    <width>1602</width>
+    <height>742</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -57,6 +57,12 @@
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_26">
+           <property name="maximumSize">
+            <size>
+             <width>90</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="text">
             <string>选择</string>
            </property>
@@ -568,28 +574,13 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>870</x>
-      <y>90</y>
-      <width>261</width>
-      <height>181</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_11">
-     <property name="sizeConstraint">
-      <enum>QLayout::SetFixedSize</enum>
-     </property>
-    </layout>
-   </widget>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>20</x>
       <y>14</y>
       <width>352</width>
-      <height>495</height>
+      <height>499</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -636,6 +627,12 @@
           <size>
            <width>0</width>
            <height>25</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>90</width>
+           <height>16777215</height>
           </size>
          </property>
          <property name="text">
@@ -727,14 +724,36 @@
      </item>
     </layout>
    </widget>
+   <widget class="scene" name="playingGround" native="true">
+    <property name="geometry">
+     <rect>
+      <x>830</x>
+      <y>10</y>
+      <width>725</width>
+      <height>545</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>725</width>
+      <height>545</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>725</width>
+      <height>545</height>
+     </size>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1241</width>
-     <height>22</height>
+     <width>1602</width>
+     <height>26</height>
     </rect>
    </property>
   </widget>
@@ -754,6 +773,12 @@
    <class>CRadar</class>
    <extends>QWidget</extends>
    <header>cradar.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>scene</class>
+   <extends>QWidget</extends>
+   <header>scene.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
