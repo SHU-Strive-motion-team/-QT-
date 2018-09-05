@@ -35,7 +35,7 @@ signals:
 	void RecSuccess(void);
 
 private:
-	QSerialPort * receiveSerialPort;
+	QSerialPort *receiveSerialPort;
 	int *Data = new int[3];
 	QByteArray originalData;
 	bool Success = false;

@@ -1,16 +1,16 @@
 /****************************************************************************
-** Meta object code from reading C++ file 'cradar.h'
+** Meta object code from reading C++ file 'scene.h'
 **
 ** Created by: The Qt Meta Object Compiler version 67 (Qt 5.9.2)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "../../cradar.h"
+#include "../../scene.h"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
-#error "The header file 'cradar.h' doesn't include <QObject>."
+#error "The header file 'scene.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
 #error "This file was generated using the moc from 5.9.2. It"
 #error "cannot be used with the include files from this version of Qt."
@@ -20,25 +20,25 @@
 QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
-struct qt_meta_stringdata_CRadar_t {
+struct qt_meta_stringdata_scene_t {
     QByteArrayData data[1];
-    char stringdata0[7];
+    char stringdata0[6];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_CRadar_t, stringdata0) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_scene_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
-static const qt_meta_stringdata_CRadar_t qt_meta_stringdata_CRadar = {
+static const qt_meta_stringdata_scene_t qt_meta_stringdata_scene = {
     {
-QT_MOC_LITERAL(0, 0, 6) // "CRadar"
+QT_MOC_LITERAL(0, 0, 5) // "scene"
 
     },
-    "CRadar"
+    "scene"
 };
 #undef QT_MOC_LITERAL
 
-static const uint qt_meta_data_CRadar[] = {
+static const uint qt_meta_data_scene[] = {
 
  // content:
        7,       // revision
@@ -54,7 +54,7 @@ static const uint qt_meta_data_CRadar[] = {
        0        // eod
 };
 
-void CRadar::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void scene::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     Q_UNUSED(_o);
     Q_UNUSED(_id);
@@ -62,26 +62,26 @@ void CRadar::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
     Q_UNUSED(_a);
 }
 
-const QMetaObject CRadar::staticMetaObject = {
-    { &QWidget::staticMetaObject, qt_meta_stringdata_CRadar.data,
-      qt_meta_data_CRadar,  qt_static_metacall, nullptr, nullptr}
+const QMetaObject scene::staticMetaObject = {
+    { &QWidget::staticMetaObject, qt_meta_stringdata_scene.data,
+      qt_meta_data_scene,  qt_static_metacall, nullptr, nullptr}
 };
 
 
-const QMetaObject *CRadar::metaObject() const
+const QMetaObject *scene::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *CRadar::qt_metacast(const char *_clname)
+void *scene::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_CRadar.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_scene.stringdata0))
         return static_cast<void*>(this);
     return QWidget::qt_metacast(_clname);
 }
 
-int CRadar::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int scene::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QWidget::qt_metacall(_c, _id, _a);
     return _id;

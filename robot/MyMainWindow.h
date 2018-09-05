@@ -29,7 +29,7 @@ public:
 	~MyMainWindow(void);
 
 protected:
-	void timerEvent(QTimerEvent *event);    //å®šæ—¶å™¨äº‹ä»¶
+	void timerEvent(QTimerEvent *event);    //¶¨Ê±Æ÷ÊÂ¼ş
 	
 
 private slots:
@@ -42,8 +42,6 @@ private slots:
     void on_pushButton_ctrl_rst_clicked();
 
     void on_pushButton_ctrl_cfm_clicked();
-
-	//void Show();
 
 	void robotDataUpdate();
 
@@ -60,39 +58,31 @@ signals:
 
 private:
 	Ui::MyMainWindowClass ui;
-	//åœ°å›¾æ˜¾ç¤º
+	//µØÍ¼ÏÔÊ¾
 	QPixmap *pixmap;            
 	QGraphicsScene *scene;
 	QGraphicsView *view;
 
 	//
 	robot *bRobot;
-	//ä¸²å£æ¥æ”¶å’Œå…¶çº¿ç¨‹
+	QThread *robotThread;
+
+	//´®¿Ú½ÓÊÕºÍÆäÏß³Ì
 	UartState currentUartState = UartState::OFF;
 	QSerialPort *currentSerialPort;
 	Receive *uartReceive;
 	QThread *receiveThread;
 
-	//é›·è¾¾åŠå…¶ä¸²å£
+	//À×´ï¼°Æä´®¿Ú
 	UartState radarUartState = UartState::OFF;
 	radar *robotRadar;
 	QThread *radarThread;
-	
+
 	int showTimerId;
 	
 	void uartInit(void);
 
-	void showMapInit();
-
-	void showMapLeft();
-
-	void showMapRight();
-
 	void showRobotData();
 
-	//æ”¾å…¥robotä¸­
-	//void uartSendCommand(char cmd,int pwm1 = 0, int pwm2 = 0, int pwm3 = 0);
-
+	void uartSendCommand(char cmd,int pwm1 = 0, int pwm2 = 0, int pwm3 = 0);
 };
-
-

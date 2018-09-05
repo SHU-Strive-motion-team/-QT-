@@ -12,14 +12,14 @@ Receive::~Receive()
 }
 
 
-/*ä¸‹ä½æœºç»™ä¸Šä½æœºå‘é€åè®®
- *	å¼€å§‹1	å¼€å§‹2	æ§åˆ¶å­—	æ•°æ®1	æ•°æ®1	æ•°æ®2	æ•°æ®2	æ•°æ®3	æ•°æ®3	æ ¡éªŒå’Œ
+/*ÏÂÎ»»ú¸øÉÏÎ»»ú·¢ËÍĞ­Òé
+ *	¿ªÊ¼1	¿ªÊ¼2	¿ØÖÆ×Ö	Êı¾İ1	Êı¾İ1	Êı¾İ2	Êı¾İ2	Êı¾İ3	Êı¾İ3	Ğ£ÑéºÍ
  *	@(0x40)	^(0x5E)	cmd		H1		L2		H2		L2		H3		L3		sum
  *SUM = 0x40 + 0x5E +cmd+H1+L1+H2+L2+H3+L3
 */ 
 void Receive::ReceiveUartData()
 {
-	qDebug() << QThread::currentThread()<<endl;
+	//qDebug() << QThread::currentThread()<<endl;
 	QByteArray buf;
 
 	while (receiveSerialPort->bytesAvailable())
@@ -30,12 +30,12 @@ void Receive::ReceiveUartData()
 
 		if (Start)
 		{
-			qDebug() << u8"æ¥æ”¶å¼€å§‹\n";
+			//qDebug() << u8"½ÓÊÕ¿ªÊ¼\n";
 			originalData += buf;
 
 			if (originalData.size() == 2)
 			{
-				//ç¬¬äºŒä¸ªä¸æ˜¯ ^ é‡æ–°æ¥æ”¶
+				//µÚ¶ş¸ö²»ÊÇ ^ ÖØĞÂ½ÓÊÕ
 				if (originalData.at(1) != '^')
 				{
 					receiveFail();
@@ -45,7 +45,7 @@ void Receive::ReceiveUartData()
 			if (originalData.size() == 10)
 			{
 				qDebug() << QString::number(Sum, 16) << endl;
-				//æ¥æ”¶æˆåŠŸ
+				//½ÓÊÕ³É¹¦
 				if (Sum == originalData.at(9))
 				{
 					qDebug() << originalData << endl;
@@ -53,16 +53,21 @@ void Receive::ReceiveUartData()
 					receiveSuccessful();
 
 				}
-				//æ¥æ”¶å¤±è´¥
+				//½ÓÊÕÊ§°Ü
 				else
 					receiveFail();
 			}
 			else
 				Sum += buf.at(0);
+			if(originalData.size() > 10)
+				receiveFail();
 		}
-		//æ¥æ”¶å¤±è´¥
+		//½ÓÊÕÊ§°Ü
 		else
 			receiveFail();
+
+		//buf = receiveSerialPort->readAll();
+
 	}
 }
 
@@ -95,17 +100,17 @@ void Receive::receiveSuccessful(void)
 	{
 		Data[i] = 0;
 	}
-
+	
 	Data[0] = ((originalData.at(3) << 8) | (originalData.at(4) & 0xff)) & 0xffff;
 	Data[1] = ((originalData.at(5) << 8) | (originalData.at(6) & 0xff)) & 0xffff;
 	Data[2] = ((originalData.at(7) << 8) | (originalData.at(8) & 0xff)) & 0xffff;
-	qDebug() << QString::number(originalData.at(8), 16) << endl;
-	qDebug() << QString::number(Data[2], 10) << endl;
+	qDebug() << QString::number(originalData.at(8),16) << endl;
+	qDebug() << QString::number(Data[2],10) << endl;
 	Success = true;
 	Start = false;
 	Type = RECTYPE(originalData.at(2));
 	Sum = 0;
 	originalData.clear();
 
-	emit RecSuccess();
+	emit RecSuccess(); 
 }

@@ -48,6 +48,9 @@
     <ClCompile Include="cradar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="MyMainWindow.h">
@@ -63,6 +66,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="cradar.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="scene.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

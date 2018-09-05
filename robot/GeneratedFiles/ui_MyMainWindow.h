@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'MyMainWindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.10.1
+** Created by: Qt User Interface Compiler version 5.9.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -29,6 +29,7 @@
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "cradar.h"
+#include "scene.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -110,8 +111,6 @@ public:
     QLineEdit *lineEdit_m3;
     QFrame *line_6;
     QFrame *line_3;
-    QWidget *horizontalLayoutWidget;
-    QHBoxLayout *horizontalLayout_11;
     QWidget *layoutWidget1;
     QVBoxLayout *verticalLayout_4;
     QLabel *label_29;
@@ -129,6 +128,7 @@ public:
     QLabel *label_34;
     QLineEdit *lineEdit_radar_d;
     CRadar *widget_radar;
+    scene *playingGround;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -137,7 +137,7 @@ public:
     {
         if (MyMainWindowClass->objectName().isEmpty())
             MyMainWindowClass->setObjectName(QStringLiteral("MyMainWindowClass"));
-        MyMainWindowClass->resize(1241, 661);
+        MyMainWindowClass->resize(1602, 742);
         centralWidget = new QWidget(MyMainWindowClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         layoutWidget = new QWidget(centralWidget);
@@ -181,13 +181,11 @@ public:
 
         label_26 = new QLabel(layoutWidget);
         label_26->setObjectName(QStringLiteral("label_26"));
+        label_26->setMaximumSize(QSize(90, 16777215));
 
         gridLayout->addWidget(label_26, 1, 0, 1, 1);
 
         comboBox_baud = new QComboBox(layoutWidget);
-        comboBox_baud->addItem(QString());
-        comboBox_baud->addItem(QString());
-        comboBox_baud->addItem(QString());
         comboBox_baud->setObjectName(QStringLiteral("comboBox_baud"));
 
         gridLayout->addWidget(comboBox_baud, 2, 1, 1, 1);
@@ -266,34 +264,16 @@ public:
         horizontalLayout_7->setSpacing(6);
         horizontalLayout_7->setObjectName(QStringLiteral("horizontalLayout_7"));
         comboBox_prg = new QComboBox(layoutWidget);
-        comboBox_prg->addItem(QString());
-        comboBox_prg->addItem(QString());
-        comboBox_prg->addItem(QString());
-        comboBox_prg->addItem(QString());
         comboBox_prg->setObjectName(QStringLiteral("comboBox_prg"));
 
         horizontalLayout_7->addWidget(comboBox_prg);
 
         comboBox_ball = new QComboBox(layoutWidget);
-        comboBox_ball->addItem(QString());
-        comboBox_ball->addItem(QString());
-        comboBox_ball->addItem(QString());
-        comboBox_ball->addItem(QString());
-        comboBox_ball->addItem(QString());
-        comboBox_ball->addItem(QString());
-        comboBox_ball->addItem(QString());
-        comboBox_ball->addItem(QString());
-        comboBox_ball->addItem(QString());
-        comboBox_ball->addItem(QString());
-        comboBox_ball->addItem(QString());
         comboBox_ball->setObjectName(QStringLiteral("comboBox_ball"));
 
         horizontalLayout_7->addWidget(comboBox_ball);
 
         comboBox_place = new QComboBox(layoutWidget);
-        comboBox_place->addItem(QString());
-        comboBox_place->addItem(QString());
-        comboBox_place->addItem(QString());
         comboBox_place->setObjectName(QStringLiteral("comboBox_place"));
 
         horizontalLayout_7->addWidget(comboBox_place);
@@ -565,18 +545,9 @@ public:
 
         horizontalLayout_9->addWidget(line_3);
 
-        horizontalLayoutWidget = new QWidget(centralWidget);
-        horizontalLayoutWidget->setObjectName(QStringLiteral("horizontalLayoutWidget"));
-        horizontalLayoutWidget->setGeometry(QRect(870, 90, 261, 181));
-        horizontalLayout_11 = new QHBoxLayout(horizontalLayoutWidget);
-        horizontalLayout_11->setSpacing(6);
-        horizontalLayout_11->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_11->setObjectName(QStringLiteral("horizontalLayout_11"));
-        horizontalLayout_11->setSizeConstraint(QLayout::SetFixedSize);
-        horizontalLayout_11->setContentsMargins(0, 0, 0, 0);
         layoutWidget1 = new QWidget(centralWidget);
         layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(20, 14, 352, 495));
+        layoutWidget1->setGeometry(QRect(20, 14, 352, 499));
         verticalLayout_4 = new QVBoxLayout(layoutWidget1);
         verticalLayout_4->setSpacing(6);
         verticalLayout_4->setContentsMargins(11, 11, 11, 11);
@@ -607,6 +578,7 @@ public:
         label_30 = new QLabel(layoutWidget1);
         label_30->setObjectName(QStringLiteral("label_30"));
         label_30->setMinimumSize(QSize(0, 25));
+        label_30->setMaximumSize(QSize(90, 16777215));
 
         gridLayout_2->addWidget(label_30, 1, 0, 1, 1);
 
@@ -667,10 +639,15 @@ public:
 
         verticalLayout_4->addWidget(widget_radar);
 
+        playingGround = new scene(centralWidget);
+        playingGround->setObjectName(QStringLiteral("playingGround"));
+        playingGround->setGeometry(QRect(830, 10, 725, 545));
+        playingGround->setMinimumSize(QSize(725, 545));
+        playingGround->setMaximumSize(QSize(725, 545));
         MyMainWindowClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MyMainWindowClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1241, 22));
+        menuBar->setGeometry(QRect(0, 0, 1602, 26));
         MyMainWindowClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MyMainWindowClass);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -687,71 +664,79 @@ public:
 
     void retranslateUi(QMainWindow *MyMainWindowClass)
     {
-        MyMainWindowClass->setWindowTitle(QApplication::translate("MyMainWindowClass", "MyMainWindow", nullptr));
-        label_25->setText(QApplication::translate("MyMainWindowClass", "\344\270\262\345\217\243\351\200\232\350\256\257", nullptr));
-        label_26->setText(QApplication::translate("MyMainWindowClass", "\351\200\211\346\213\251", nullptr));
-        comboBox_baud->setItemText(0, QApplication::translate("MyMainWindowClass", "115200", nullptr));
-        comboBox_baud->setItemText(1, QApplication::translate("MyMainWindowClass", "9600", nullptr));
-        comboBox_baud->setItemText(2, QApplication::translate("MyMainWindowClass", "38400", nullptr));
-
-        label_27->setText(QApplication::translate("MyMainWindowClass", "\346\263\242\347\211\271\347\216\207", nullptr));
-        label_28->setText(QApplication::translate("MyMainWindowClass", "\346\223\215\344\275\234", nullptr));
-        pushButton_uart_rfresh->setText(QApplication::translate("MyMainWindowClass", "\345\210\267\346\226\260", nullptr));
-        pushButton_uart_sw->setText(QApplication::translate("MyMainWindowClass", "\346\211\223\345\274\200\344\270\262\345\217\243", nullptr));
-        label_21->setText(QApplication::translate("MyMainWindowClass", "\346\216\247\345\210\266", nullptr));
-        label_22->setText(QApplication::translate("MyMainWindowClass", "\347\250\213\345\272\217\351\200\211\346\213\251", nullptr));
-        label_23->setText(QApplication::translate("MyMainWindowClass", "\347\220\203", nullptr));
-        label_24->setText(QApplication::translate("MyMainWindowClass", "\345\234\272\345\234\260\351\200\211\346\213\251", nullptr));
-        comboBox_prg->setItemText(0, QApplication::translate("MyMainWindowClass", "0\357\274\232\346\265\213\350\257\225", nullptr));
-        comboBox_prg->setItemText(1, QApplication::translate("MyMainWindowClass", "1\357\274\232\347\254\254\344\270\200\345\233\236\345\220\210", nullptr));
-        comboBox_prg->setItemText(2, QApplication::translate("MyMainWindowClass", "2\357\274\232\347\254\254\344\272\214\345\233\236\345\220\210", nullptr));
-        comboBox_prg->setItemText(3, QApplication::translate("MyMainWindowClass", "3\357\274\232\347\254\254\344\270\211\345\233\236\345\220\210", nullptr));
-
-        comboBox_ball->setItemText(0, QApplication::translate("MyMainWindowClass", "0", nullptr));
-        comboBox_ball->setItemText(1, QApplication::translate("MyMainWindowClass", "1", nullptr));
-        comboBox_ball->setItemText(2, QApplication::translate("MyMainWindowClass", "2", nullptr));
-        comboBox_ball->setItemText(3, QApplication::translate("MyMainWindowClass", "3", nullptr));
-        comboBox_ball->setItemText(4, QApplication::translate("MyMainWindowClass", "4", nullptr));
-        comboBox_ball->setItemText(5, QApplication::translate("MyMainWindowClass", "5", nullptr));
-        comboBox_ball->setItemText(6, QApplication::translate("MyMainWindowClass", "6", nullptr));
-        comboBox_ball->setItemText(7, QApplication::translate("MyMainWindowClass", "7", nullptr));
-        comboBox_ball->setItemText(8, QApplication::translate("MyMainWindowClass", "8", nullptr));
-        comboBox_ball->setItemText(9, QApplication::translate("MyMainWindowClass", "9", nullptr));
-        comboBox_ball->setItemText(10, QApplication::translate("MyMainWindowClass", "10", nullptr));
-
-        comboBox_place->setItemText(0, QString());
-        comboBox_place->setItemText(1, QApplication::translate("MyMainWindowClass", "\345\267\246\345\234\272\345\234\260", nullptr));
-        comboBox_place->setItemText(2, QApplication::translate("MyMainWindowClass", "\345\217\263\345\234\272\345\234\260", nullptr));
-
-        pushButton_ctrl_rst->setText(QApplication::translate("MyMainWindowClass", "\351\207\215\347\275\256", nullptr));
-        pushButton_ctrl_cfm->setText(QApplication::translate("MyMainWindowClass", "\347\241\256\345\256\232", nullptr));
-        label_8->setText(QApplication::translate("MyMainWindowClass", "\345\247\277\346\200\201\344\277\241\346\201\257", nullptr));
-        label->setText(QApplication::translate("MyMainWindowClass", "X:", nullptr));
-        label_2->setText(QApplication::translate("MyMainWindowClass", "Y:", nullptr));
-        label_4->setText(QApplication::translate("MyMainWindowClass", "ROW:", nullptr));
-        label_9->setText(QApplication::translate("MyMainWindowClass", "\346\234\272\345\231\250\344\272\272\351\200\237\345\272\246", nullptr));
-        label_10->setText(QApplication::translate("MyMainWindowClass", "Vx:", nullptr));
-        label_11->setText(QApplication::translate("MyMainWindowClass", "Vy:", nullptr));
-        label_12->setText(QApplication::translate("MyMainWindowClass", "Vw:", nullptr));
-        label_7->setText(QApplication::translate("MyMainWindowClass", "\344\270\273\345\212\250\350\275\256\351\200\237\345\272\246", nullptr));
-        label_5->setText(QApplication::translate("MyMainWindowClass", "V!:", nullptr));
-        label_6->setText(QApplication::translate("MyMainWindowClass", "V2:", nullptr));
-        label_3->setText(QApplication::translate("MyMainWindowClass", "V3:", nullptr));
-        label_13->setText(QApplication::translate("MyMainWindowClass", "PWM\345\217\202\346\225\260", nullptr));
-        label_14->setText(QApplication::translate("MyMainWindowClass", "PWM1:", nullptr));
-        label_15->setText(QApplication::translate("MyMainWindowClass", "PWM2:", nullptr));
-        label_16->setText(QApplication::translate("MyMainWindowClass", "PWM3:", nullptr));
-        label_17->setText(QApplication::translate("MyMainWindowClass", "\351\207\214\347\250\213\350\256\241", nullptr));
-        label_18->setText(QApplication::translate("MyMainWindowClass", "A:", nullptr));
-        label_19->setText(QApplication::translate("MyMainWindowClass", "B:", nullptr));
-        label_20->setText(QApplication::translate("MyMainWindowClass", "C:", nullptr));
-        label_29->setText(QApplication::translate("MyMainWindowClass", "\351\233\267\350\276\276\344\270\262\345\217\243\351\200\211\346\213\251", nullptr));
-        label_32->setText(QApplication::translate("MyMainWindowClass", "\346\223\215\344\275\234", nullptr));
-        label_30->setText(QApplication::translate("MyMainWindowClass", "\351\200\211\346\213\251", nullptr));
-        pushButton_uart_rfresh_r->setText(QApplication::translate("MyMainWindowClass", "\345\210\267\346\226\260", nullptr));
-        pushButton_uart_sw_r->setText(QApplication::translate("MyMainWindowClass", "\345\274\200\345\247\213", nullptr));
-        label_33->setText(QApplication::translate("MyMainWindowClass", "\350\247\222\345\272\246\357\274\232", nullptr));
-        label_34->setText(QApplication::translate("MyMainWindowClass", "\350\267\235\347\246\273\357\274\232", nullptr));
+        MyMainWindowClass->setWindowTitle(QApplication::translate("MyMainWindowClass", "MyMainWindow", Q_NULLPTR));
+        label_25->setText(QApplication::translate("MyMainWindowClass", "\344\270\262\345\217\243\351\200\232\350\256\257", Q_NULLPTR));
+        label_26->setText(QApplication::translate("MyMainWindowClass", "\351\200\211\346\213\251", Q_NULLPTR));
+        comboBox_baud->clear();
+        comboBox_baud->insertItems(0, QStringList()
+         << QApplication::translate("MyMainWindowClass", "115200", Q_NULLPTR)
+         << QApplication::translate("MyMainWindowClass", "9600", Q_NULLPTR)
+         << QApplication::translate("MyMainWindowClass", "38400", Q_NULLPTR)
+        );
+        label_27->setText(QApplication::translate("MyMainWindowClass", "\346\263\242\347\211\271\347\216\207", Q_NULLPTR));
+        label_28->setText(QApplication::translate("MyMainWindowClass", "\346\223\215\344\275\234", Q_NULLPTR));
+        pushButton_uart_rfresh->setText(QApplication::translate("MyMainWindowClass", "\345\210\267\346\226\260", Q_NULLPTR));
+        pushButton_uart_sw->setText(QApplication::translate("MyMainWindowClass", "\346\211\223\345\274\200\344\270\262\345\217\243", Q_NULLPTR));
+        label_21->setText(QApplication::translate("MyMainWindowClass", "\346\216\247\345\210\266", Q_NULLPTR));
+        label_22->setText(QApplication::translate("MyMainWindowClass", "\347\250\213\345\272\217\351\200\211\346\213\251", Q_NULLPTR));
+        label_23->setText(QApplication::translate("MyMainWindowClass", "\347\220\203", Q_NULLPTR));
+        label_24->setText(QApplication::translate("MyMainWindowClass", "\345\234\272\345\234\260\351\200\211\346\213\251", Q_NULLPTR));
+        comboBox_prg->clear();
+        comboBox_prg->insertItems(0, QStringList()
+         << QApplication::translate("MyMainWindowClass", "0\357\274\232\346\265\213\350\257\225", Q_NULLPTR)
+         << QApplication::translate("MyMainWindowClass", "1\357\274\232\347\254\254\344\270\200\345\233\236\345\220\210", Q_NULLPTR)
+         << QApplication::translate("MyMainWindowClass", "2\357\274\232\347\254\254\344\272\214\345\233\236\345\220\210", Q_NULLPTR)
+         << QApplication::translate("MyMainWindowClass", "3\357\274\232\347\254\254\344\270\211\345\233\236\345\220\210", Q_NULLPTR)
+        );
+        comboBox_ball->clear();
+        comboBox_ball->insertItems(0, QStringList()
+         << QApplication::translate("MyMainWindowClass", "0", Q_NULLPTR)
+         << QApplication::translate("MyMainWindowClass", "1", Q_NULLPTR)
+         << QApplication::translate("MyMainWindowClass", "2", Q_NULLPTR)
+         << QApplication::translate("MyMainWindowClass", "3", Q_NULLPTR)
+         << QApplication::translate("MyMainWindowClass", "4", Q_NULLPTR)
+         << QApplication::translate("MyMainWindowClass", "5", Q_NULLPTR)
+         << QApplication::translate("MyMainWindowClass", "6", Q_NULLPTR)
+         << QApplication::translate("MyMainWindowClass", "7", Q_NULLPTR)
+         << QApplication::translate("MyMainWindowClass", "8", Q_NULLPTR)
+         << QApplication::translate("MyMainWindowClass", "9", Q_NULLPTR)
+         << QApplication::translate("MyMainWindowClass", "10", Q_NULLPTR)
+        );
+        comboBox_place->clear();
+        comboBox_place->insertItems(0, QStringList()
+         << QString()
+         << QApplication::translate("MyMainWindowClass", "\345\267\246\345\234\272\345\234\260", Q_NULLPTR)
+         << QApplication::translate("MyMainWindowClass", "\345\217\263\345\234\272\345\234\260", Q_NULLPTR)
+        );
+        pushButton_ctrl_rst->setText(QApplication::translate("MyMainWindowClass", "\351\207\215\347\275\256", Q_NULLPTR));
+        pushButton_ctrl_cfm->setText(QApplication::translate("MyMainWindowClass", "\347\241\256\345\256\232", Q_NULLPTR));
+        label_8->setText(QApplication::translate("MyMainWindowClass", "\345\247\277\346\200\201\344\277\241\346\201\257", Q_NULLPTR));
+        label->setText(QApplication::translate("MyMainWindowClass", "X:", Q_NULLPTR));
+        label_2->setText(QApplication::translate("MyMainWindowClass", "Y:", Q_NULLPTR));
+        label_4->setText(QApplication::translate("MyMainWindowClass", "ROW:", Q_NULLPTR));
+        label_9->setText(QApplication::translate("MyMainWindowClass", "\346\234\272\345\231\250\344\272\272\351\200\237\345\272\246", Q_NULLPTR));
+        label_10->setText(QApplication::translate("MyMainWindowClass", "Vx:", Q_NULLPTR));
+        label_11->setText(QApplication::translate("MyMainWindowClass", "Vy:", Q_NULLPTR));
+        label_12->setText(QApplication::translate("MyMainWindowClass", "Vw:", Q_NULLPTR));
+        label_7->setText(QApplication::translate("MyMainWindowClass", "\344\270\273\345\212\250\350\275\256\351\200\237\345\272\246", Q_NULLPTR));
+        label_5->setText(QApplication::translate("MyMainWindowClass", "V!:", Q_NULLPTR));
+        label_6->setText(QApplication::translate("MyMainWindowClass", "V2:", Q_NULLPTR));
+        label_3->setText(QApplication::translate("MyMainWindowClass", "V3:", Q_NULLPTR));
+        label_13->setText(QApplication::translate("MyMainWindowClass", "PWM\345\217\202\346\225\260", Q_NULLPTR));
+        label_14->setText(QApplication::translate("MyMainWindowClass", "PWM1:", Q_NULLPTR));
+        label_15->setText(QApplication::translate("MyMainWindowClass", "PWM2:", Q_NULLPTR));
+        label_16->setText(QApplication::translate("MyMainWindowClass", "PWM3:", Q_NULLPTR));
+        label_17->setText(QApplication::translate("MyMainWindowClass", "\351\207\214\347\250\213\350\256\241", Q_NULLPTR));
+        label_18->setText(QApplication::translate("MyMainWindowClass", "A:", Q_NULLPTR));
+        label_19->setText(QApplication::translate("MyMainWindowClass", "B:", Q_NULLPTR));
+        label_20->setText(QApplication::translate("MyMainWindowClass", "C:", Q_NULLPTR));
+        label_29->setText(QApplication::translate("MyMainWindowClass", "\351\233\267\350\276\276\344\270\262\345\217\243\351\200\211\346\213\251", Q_NULLPTR));
+        label_32->setText(QApplication::translate("MyMainWindowClass", "\346\223\215\344\275\234", Q_NULLPTR));
+        label_30->setText(QApplication::translate("MyMainWindowClass", "\351\200\211\346\213\251", Q_NULLPTR));
+        pushButton_uart_rfresh_r->setText(QApplication::translate("MyMainWindowClass", "\345\210\267\346\226\260", Q_NULLPTR));
+        pushButton_uart_sw_r->setText(QApplication::translate("MyMainWindowClass", "\345\274\200\345\247\213", Q_NULLPTR));
+        label_33->setText(QApplication::translate("MyMainWindowClass", "\350\247\222\345\272\246\357\274\232", Q_NULLPTR));
+        label_34->setText(QApplication::translate("MyMainWindowClass", "\350\267\235\347\246\273\357\274\232", Q_NULLPTR));
     } // retranslateUi
 
 };

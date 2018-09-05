@@ -4,11 +4,25 @@
 
 # This is a reminder that you are using a generated .pro file.
 # Remove it when you are finished editing this file.
+message("You are running qmake on a generated .pro file. This may not work!")
 
 
-
-HEADERS += ./MyMainWindow.h
-SOURCES += ./main.cpp \
-    ./MyMainWindow.cpp
+HEADERS += ./rplidar.h \
+    ./MyMainWindow.h \
+    ./Receive.h \
+    ./robot.h \
+    ./radar.h \
+    ./cradar.h \
+    ./scene.h
+SOURCES += ./cradar.cpp \
+    ./main.cpp \
+    ./MyMainWindow.cpp \
+    ./radar.cpp \
+    ./Receive.cpp \
+    ./robot.cpp \
+    ./scene.cpp
 FORMS += ./MyMainWindow.ui
 RESOURCES += MyMainWindow.qrc
+
+DISTFILES += \
+    $$PWD/rplidar_driver.lib

@@ -4,18 +4,15 @@
 
 TEMPLATE = app
 TARGET = robot
-
-#DESTDIR = ../x64/Debug
+DESTDIR = ../x64/Debug
 QT += core gui widgets serialport
+CONFIG += debug
+DEFINES += _UNICODE WIN64 QT_DLL QT_SERIALPORT_LIB QT_WIDGETS_LIB
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
-#CONFIG += debug
-#DEFINES += _UNICODE WIN64 QT_DLL QT_SERIALPORT_LIB QT_WIDGETS_LIB
-#INCLUDEPATH += ./GeneratedFiles \
-#    . \
-#    ./GeneratedFiles/$(ConfigurationName)
-#DEPENDPATH += .
+LIBS += -lrplidar_driver \
+    -lopencv_world341 \
+    -lopencv_world341d
+DEPENDPATH += .
 #MOC_DIR += ./GeneratedFiles/$(ConfigurationName)
 #OBJECTS_DIR += debug
 #UI_DIR += ./GeneratedFiles
